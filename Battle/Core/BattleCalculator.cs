@@ -350,7 +350,7 @@ namespace Server.Battle.Core
             if (skill.effects.Count > 0)
             {
                 var mainEffect = skill.effects[0];
-                targets = SelectTargetsBySelection(caster, mainEffect.targetSelection, allUnits);
+                targets = SelectTargetsBySelection(caster, mainEffect.targetType, allUnits);
             }
 
             return targets;
@@ -361,7 +361,7 @@ namespace Server.Battle.Core
         /// </summary>
         private List<BattleUnit> SelectTargetsBySelection(
             BattleUnit caster,
-            TargetSelection targetSelection,
+            TargetType targetSelection,
             List<BattleUnit> allUnits)
         {
             var targets = new List<BattleUnit>();

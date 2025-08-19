@@ -21,19 +21,6 @@ namespace Server.Battle.Data
             Draw = 3        // 平局
         }
         
-        /// <summary>
-        /// 目标类型
-        /// </summary>
-        public enum TargetType
-        {
-            Self = 1,           // 自身
-            SingleEnemy = 2,    // 单个敌人
-            AllEnemies = 3,     // 所有敌人
-            SingleAlly = 4,     // 单个队友
-            AllAllies = 5,      // 所有队友
-            Random = 6          // 随机目标
-        }
-        
         #endregion
 
         #region 数据结构

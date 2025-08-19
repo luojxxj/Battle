@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Server.Battle.Config;
 
 namespace Server.Battle.Skill
 {
@@ -51,26 +52,6 @@ namespace Server.Battle.Skill
         OnBuffExpire = 11    // Buff失效时
     }
 
-    /// <summary>
-    /// 目标选择类型
-    /// </summary>
-    public enum TargetSelection
-    {
-        Self = 1,                    // 自身
-        SingleEnemy = 2,             // 单个敌人
-        AllEnemies = 3,             // 所有敌人
-        RandomEnemy = 4,            // 随机敌人
-        SingleAlly = 5,             // 单个盟友
-        AllAllies = 6,              // 所有盟友
-        RandomAlly = 7,             // 随机盟友
-        LowestHpEnemy = 8,          // 血量最低的敌人
-        HighestHpEnemy = 9,         // 血量最高的敌人
-        LowestHpAlly = 10,          // 血量最低的盟友
-        HighestHpAlly = 11,         // 血量最高的盟友
-        FrontLineEnemies = 12,      // 前排敌人
-        BackLineEnemies = 13        // 后排敌人
-    }
-
     #endregion
 
     #region 核心数据结构
@@ -110,7 +91,7 @@ namespace Server.Battle.Skill
     {
         public int effectId;                         // 效果ID
         public EffectType effectType;               // 效果类型
-        public TargetSelection targetSelection;     // 目标选择
+        public TargetType targetType;     // 目标选择
         public TriggerTiming triggerTiming;         // 触发时机
         
         // 数值相关

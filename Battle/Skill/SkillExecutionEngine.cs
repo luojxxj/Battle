@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Server.Battle.Config;
 using Server.Battle.Data;
 using static Server.Battle.Data.ServerBattleData;
 
@@ -65,7 +66,7 @@ namespace Server.Battle.Skill
             // 执行技能效果
             foreach (var effect in skillDef.effects)
             {
-                var effectTargets = SelectTargets(caster, effect.targetSelection, allUnits);
+                var effectTargets = SelectTargets(caster, effect.targetType, allUnits);
                 var effectActions = ExecuteSkillEffect(caster, effect, effectTargets, allUnits);
                 result.actions.AddRange(effectActions);
             }
@@ -369,55 +370,45 @@ namespace Server.Battle.Skill
         /// </summary>
         private List<BattleUnit> SelectTargets(
             BattleUnit caster,
-            TargetSelection targetSelection,
+            TargetType targetType,
             List<BattleUnit> allUnits)
         {
             var targets = new List<BattleUnit>();
             var enemies = allUnits.Where(u => u.isAlive).ToList();
             var allies = allUnits.Where(u => u.isAlive).ToList();
             
-            switch (targetSelection)
+            switch (targetType)
             {
-                case TargetSelection.Self:
+                case TargetType.Self:
                     targets.Add(caster);
                     break;
                     
-                case TargetSelection.SingleEnemy:
+                case TargetType.SingleEnemy:
                     if (enemies.Count > 0)
                         targets.Add(enemies[_random.Next(enemies.Count)]);
                     break;
                     
-                case TargetSelection.AllEnemies:
+                case TargetType.AllEnemies:
                     targets.AddRange(enemies);
                     break;
                     
-                case TargetSelection.SingleAlly:
+                case TargetType.SingleAlly:
                     if (allies.Count > 0)
                         targets.Add(allies[_random.Next(allies.Count)]);
                     break;
                     
-                case TargetSelection.AllAllies:
+                case TargetType.AllAllies:
                     targets.AddRange(allies);
                     break;
                     
-                case TargetSelection.LowestHpEnemy:
+                case TargetType.AllyLowestHp:
                     if (enemies.Count > 0)
                         targets.Add(enemies.OrderBy(u => u.HpPercent).First());
                     break;
                     
-                case TargetSelection.HighestHpEnemy:
+                case TargetType.EnemyHighestCurrentHp:
                     if (enemies.Count > 0)
                         targets.Add(enemies.OrderByDescending(u => u.HpPercent).First());
-                    break;
-                    
-                case TargetSelection.LowestHpAlly:
-                    if (allies.Count > 0)
-                        targets.Add(allies.OrderBy(u => u.HpPercent).First());
-                    break;
-                    
-                case TargetSelection.HighestHpAlly:
-                    if (allies.Count > 0)
-                        targets.Add(allies.OrderByDescending(u => u.HpPercent).First());
                     break;
             }
             

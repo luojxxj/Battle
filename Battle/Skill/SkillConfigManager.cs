@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Server.Battle.Config;
 
 namespace Server.Battle.Skill
 {
@@ -44,7 +45,7 @@ namespace Server.Battle.Skill
         public class EffectTemplate
         {
             public EffectType effectType;
-            public TargetSelection targetSelection;
+            public TargetType targetType;
             public Dictionary<string, object> defaultParameters;
             
             public EffectTemplate()
@@ -68,7 +69,7 @@ namespace Server.Battle.Skill
                     new EffectTemplate
                     {
                         effectType = EffectType.Damage,
-                        targetSelection = TargetSelection.SingleEnemy,
+                        targetType = TargetType.SingleEnemy,
                         defaultParameters = new Dictionary<string, object>
                         {
                             {"scaleAttribute", "attack"},
@@ -90,7 +91,7 @@ namespace Server.Battle.Skill
                     new EffectTemplate
                     {
                         effectType = EffectType.Damage,
-                        targetSelection = TargetSelection.AllEnemies,
+                        targetType = TargetType.AllEnemies,
                         defaultParameters = new Dictionary<string, object>
                         {
                             {"scaleAttribute", "attack"},
@@ -112,7 +113,7 @@ namespace Server.Battle.Skill
                     new EffectTemplate
                     {
                         effectType = EffectType.Heal,
-                        targetSelection = TargetSelection.LowestHpAlly,
+                        targetType = TargetType.AllyLowestHp,
                         defaultParameters = new Dictionary<string, object>
                         {
                             {"scaleAttribute", "attack"},
@@ -133,7 +134,7 @@ namespace Server.Battle.Skill
                     new EffectTemplate
                     {
                         effectType = EffectType.Buff,
-                        targetSelection = TargetSelection.Self,
+                        targetType = TargetType.Self,
                         defaultParameters = new Dictionary<string, object>
                         {
                             {"duration", 3},
@@ -155,7 +156,7 @@ namespace Server.Battle.Skill
                     new EffectTemplate
                     {
                         effectType = EffectType.Debuff,
-                        targetSelection = TargetSelection.SingleEnemy,
+                        targetType = TargetType.SingleEnemy,
                         defaultParameters = new Dictionary<string, object>
                         {
                             {"duration", 2},
@@ -177,7 +178,7 @@ namespace Server.Battle.Skill
                     new EffectTemplate
                     {
                         effectType = EffectType.Damage,
-                        targetSelection = TargetSelection.SingleEnemy,
+                        targetType = TargetType.SingleEnemy,
                         defaultParameters = new Dictionary<string, object>
                         {
                             {"scaleAttribute", "attack"},
@@ -188,7 +189,7 @@ namespace Server.Battle.Skill
                     new EffectTemplate
                     {
                         effectType = EffectType.Debuff,
-                        targetSelection = TargetSelection.SingleEnemy,
+                        targetType = TargetType.SingleEnemy,
                         defaultParameters = new Dictionary<string, object>
                         {
                             {"duration", 3},
@@ -273,7 +274,7 @@ namespace Server.Battle.Skill
                     {
                         effectId = 1,
                         effectType = EffectType.Special,
-                        targetSelection = TargetSelection.SingleEnemy,
+                        targetType = TargetType.SingleEnemy,
                         baseValue = 35,
                         scaleAttribute = "attack",
                         scaleValue = 1.0f,
@@ -302,7 +303,7 @@ namespace Server.Battle.Skill
                     new SkillEffect
                     {
                         effectType = EffectType.Special,
-                        targetSelection = TargetSelection.SingleEnemy,
+                        targetType = TargetType.SingleEnemy,
                         baseValue = 30,
                         scaleAttribute = "attack",
                         scaleValue = 1.2f,
@@ -330,7 +331,7 @@ namespace Server.Battle.Skill
                     new SkillEffect
                     {
                         effectType = EffectType.Shield,
-                        targetSelection = TargetSelection.SingleAlly,
+                        targetType = TargetType.SingleAlly,
                         baseValue = 50,
                         duration = 5,
                         parameters = new Dictionary<string, object>
@@ -369,7 +370,7 @@ namespace Server.Battle.Skill
                 var effect = new SkillEffect
                 {
                     effectType = effectTemplate.effectType,
-                    targetSelection = effectTemplate.targetSelection,
+                    targetType = effectTemplate.targetType,
                     probability = 1.0f
                 };
                 

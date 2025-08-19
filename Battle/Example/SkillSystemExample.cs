@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Server.Battle.Config;
 using Server.Battle.Core;
 using Server.Battle.Data;
 using Server.Battle.Skill;
@@ -88,7 +89,7 @@ namespace Server.Battle.Example
                     
                     foreach (var effect in skill.effects)
                     {
-                        Console.WriteLine($"    - {effect.effectType}: 基础值{effect.baseValue}, 目标{effect.targetSelection}");
+                        Console.WriteLine($"    - {effect.effectType}: 基础值{effect.baseValue}, 目标{effect.targetType}");
                         if (effect.probability < 1.0f)
                         {
                             Console.WriteLine($"      触发概率: {effect.probability * 100}%");
@@ -248,7 +249,7 @@ namespace Server.Battle.Example
                     {
                         effectId = 1,
                         effectType = EffectType.Damage,
-                        targetSelection = TargetSelection.SingleEnemy,
+                        targetType = TargetType.SingleEnemy,
                         baseValue = 20,
                         scaleAttribute = "attack",
                         scaleValue = 1.0f,
@@ -259,7 +260,7 @@ namespace Server.Battle.Example
                     {
                         effectId = 2,
                         effectType = EffectType.Damage,
-                        targetSelection = TargetSelection.SingleEnemy,
+                        targetType = TargetType.SingleEnemy,
                         baseValue = 15,
                         scaleAttribute = "attack",
                         scaleValue = 0.8f,
@@ -270,7 +271,7 @@ namespace Server.Battle.Example
                     {
                         effectId = 3,
                         effectType = EffectType.Damage,
-                        targetSelection = TargetSelection.SingleEnemy,
+                        targetType = TargetType.SingleEnemy,
                         baseValue = 10,
                         scaleAttribute = "attack",
                         scaleValue = 0.6f,
@@ -280,7 +281,7 @@ namespace Server.Battle.Example
                     {
                         effectId = 4,
                         effectType = EffectType.Debuff,
-                        targetSelection = TargetSelection.SingleEnemy,
+                        targetType = TargetType.SingleEnemy,
                         duration = 2,
                         probability = 0.9f
                     }
@@ -329,7 +330,7 @@ namespace Server.Battle.Example
                     
                     foreach (var effectTemplate in template.effectTemplates)
                     {
-                        Console.WriteLine($"    - {effectTemplate.effectType} -> {effectTemplate.targetSelection}");
+                        Console.WriteLine($"    - {effectTemplate.effectType} -> {effectTemplate.targetType}");
                         Console.WriteLine($"      默认参数: {effectTemplate.defaultParameters.Count}个");
                     }
                 }
