@@ -1,0 +1,47 @@
+﻿[
+    {
+        "buffId": "Regeneration",
+        "buffName": "再生",
+        "description": "每回合恢复生命值，持续3回合。",
+        "buffType": 2, // Heal（对应EffectType枚举值）
+        "isVisible": true,
+        "icon": "buff_regen.png",
+        "maxStacks": 1,
+        "defaultDuration": 3,
+        "stackType": 1, // Stack（对应StackType枚举值）
+        "dispelType": "Magic",
+        "immunityTags": [ "Poison", "Burn" ],
+        "tickEffect": {
+            "effectType": 2, // Heal
+            "damageType": 0, // 可选，视DamageType定义
+            "probability": 1.0,
+            "effectId": "regen_tick",
+            "baseValue": 50,
+            "scaleType": 0,
+            "scaleValue": 0.0,
+            "canCrit": false,
+            "element": 0,
+            "ignoreDefense": false,
+            "ignoreResistance": false,
+            "buffId": "",
+            "duration": 0,
+            "stackType": 0,
+            "maxStacks": 0,
+            "tickDamage": 0,
+            "effectRange": 0,
+            "delayRounds": 0,
+            "attributeModifiers": [],
+            "specialEffect": null,
+            "soundEffectId": "",
+            "visualEffectId": ""
+        },
+        "attributeModifiers": [
+            {
+                "attributeType": 1, // 例如：1代表生命值
+                "modifierType": 0, // 例如：0代表加法
+                "value": 0.0,
+                "isPercent": false
+            }
+        ]
+    }
+]
