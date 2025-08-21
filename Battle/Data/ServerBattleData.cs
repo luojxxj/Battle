@@ -125,7 +125,6 @@ namespace Server.Battle.Data
             public string battleId;                    // 战斗ID
             public BattleResult result;               // 战斗结果
             public List<BattleRound> rounds;          // 所有回合数据
-            public Dictionary<int, BattleUnit> initialUnits; // 初始单位状态
             public BattleStatistics statistics;       // 战斗统计
             public DateTime battleStartTime;          // 战斗开始时间
             public DateTime battleEndTime;            // 战斗结束时间
@@ -134,7 +133,6 @@ namespace Server.Battle.Data
             public CompleteBattleData()
             {
                 rounds = new List<BattleRound>();
-                initialUnits = new Dictionary<int, BattleUnit>();
                 battleId = Guid.NewGuid().ToString();
                 battleStartTime = DateTime.Now;
             }

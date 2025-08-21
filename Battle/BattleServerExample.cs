@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Server.Battle.API;
 using Server.Battle.Data;
+using Server.Battle.Example;
 using Server.Battle.Logic;
 using static Server.Battle.Data.ServerBattleData;
 
@@ -27,6 +29,9 @@ namespace Server.Battle
         {
             Console.WriteLine("=== 战斗服务器启动 ===");
             Console.WriteLine("等待客户端请求...");
+
+            //模拟技能释放
+            SkillSystemExample.RunExample();
 
             // 模拟处理一些战斗请求
             await SimulateBattleRequests();
@@ -60,6 +65,27 @@ namespace Server.Battle
             {
                 playerId = 12345,
             };
+
+            request.TeamOne = new List<Hero>();
+            request.TeamTwo = new List<Hero>();
+            // 添加一些模拟英雄到队伍
+            request.TeamOne.Add(new Hero
+            {
+                Uid = 1,
+                AttackId = 101, // 普通攻击ID
+                SkillId = 201, // 主动技能ID
+                PassiveSkillIds = new List<int> { 301, 302 }, // 被动技能ID列表
+                AttrDic = new Dictionary<int, float> { { 1001, 100 }, { 1002, 10}, { 1003 , 20 }, { 1004 , 121 } }
+            });
+
+            request.TeamTwo.Add(new Hero
+            {
+                Uid = 2,
+                AttackId = 102, // 普通攻击ID
+                SkillId = 202, // 主动技能ID
+                PassiveSkillIds = new List<int> { 303, 304 }, // 被动技能ID列表
+                AttrDic = new Dictionary<int, float> { { 1001, 100 }, { 1002, 8 }, { 1003, 21 }, { 1004, 125 } }
+            });
 
             // 开始战斗
             var battleResponse = await _battleController.StartBattle(request);

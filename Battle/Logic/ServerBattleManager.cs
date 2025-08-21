@@ -118,11 +118,6 @@ namespace Server.Battle.Logic
 
             var battleData = _activeBattles[battleId];
 
-            // 验证权限
-            if (!ValidateBattleOwnership(playerId, battleData))
-            {
-                return null;
-            }
 
             return battleData;
         }
@@ -155,20 +150,6 @@ namespace Server.Battle.Logic
             }
 
             return true;
-        }
-
-        /// <summary>
-        /// 验证战斗所有权
-        /// </summary>
-        private bool ValidateBattleOwnership(int playerId, CompleteBattleData battleData)
-        {
-            // 检查战斗数据中是否包含该玩家的单位
-            foreach (var unit in battleData.initialUnits.Values)
-            {
-                return true;
-            }
-
-            return false;
         }
 
         #endregion

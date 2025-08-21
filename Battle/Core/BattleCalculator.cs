@@ -71,13 +71,7 @@ namespace Server.Battle.Core
 
             // 初始化单位
             InitializePlayerUnits(teamOne);
-            InitializePlayerUnits(teamTwo);
-
-            // 保存初始状态
-            SaveInitialStates();
-
-            // 加载技能
-            var skill = SkillConfigLoader.Instance;
+            InitializeEnemyUnits(teamTwo);
 
             // 计算回合顺序
             CalculateTurnOrder();
@@ -140,6 +134,22 @@ namespace Server.Battle.Core
         }
 
         /// <summary>
+        /// 初始化敌方单位
+        /// </summary>
+        private void InitializeEnemyUnits(List<Hero> teamHero)
+        {
+            _enemyUnits.Clear();
+
+            for (int i = 0; i < teamHero.Count; i++)
+            {
+                var unit = CreatePlayerUnit(teamHero[i]);
+                _enemyUnits[i] = unit;
+            }
+
+            Console.WriteLine($"[BattleCalculator] 初始化敌方单位完成，数量: {_playerUnits.Count}");
+        }
+
+        /// <summary>
         /// 初始化单位技能
         /// </summary>
         public void InitializeUnitSkills(long unitId, List<int> skillIds)
@@ -194,7 +204,7 @@ namespace Server.Battle.Core
             {
                 if (!unit.isAlive) continue;
 
-                var action = DecideUnitAction(unit);
+                var action = DecideUnitAction(unit, roundNumber);
                 if (action != null)
                 {
                     ExecuteAction(action);
@@ -218,10 +228,10 @@ namespace Server.Battle.Core
         /// <summary>
         /// 决定单位行动
         /// </summary>
-        protected BattleAction DecideUnitAction(BattleUnit unit)
+        protected BattleAction DecideUnitAction(BattleUnit unit, int roundNumber)
         {
             // 回合开始判定
-
+            OnRoundStart(roundNumber);
 
             // 判断单位是否可以行动
 
@@ -250,6 +260,7 @@ namespace Server.Battle.Core
             }
 
             //回合结束判定
+            OnRoundEnd(roundNumber);
 
             // 技能执行失败，使用基础攻击
             return null;
@@ -372,11 +383,11 @@ namespace Server.Battle.Core
         /// <summary>
         /// 获取所有单位（需要在基类中实现或重写）
         /// </summary>
-        protected virtual List<ServerBattleData.BattleUnit> GetAllUnits()
+        protected virtual List<BattleUnit> GetAllUnits()
         {
             // 这里需要根据基类的实际实现来获取所有单位
             // 示例实现：
-            var allUnits = new List<ServerBattleData.BattleUnit>();
+            var allUnits = new List<BattleUnit>();
             // allUnits.AddRange(_playerUnits.Values);
             // allUnits.AddRange(_enemyUnits.Values);
             return allUnits;
@@ -404,14 +415,8 @@ namespace Server.Battle.Core
         /// </summary>
         private BattleUnit GetUnitById(long unitId)
         {
-           
-            var result = _playerUnits.Values.ToList().Find(m => m.unitId == unitId);
-            if (result == null)
-            {
-                result = _enemyUnits.Values.ToList().Find(m => m.unitId == unitId);
-            }
-
-            return result;
+            var allUnits = _playerUnits.Values.Concat(_enemyUnits.Values).ToList();
+            return allUnits.Find(m => m.unitId == unitId);
         }
 
         private List<BattleUnit> GetUnitByIds(List<long> unitIds)
@@ -678,22 +683,6 @@ namespace Server.Battle.Core
         #endregion
 
         #region 数据处理方法
-
-        /// <summary>
-        /// 保存初始状态
-        /// </summary>
-        private void SaveInitialStates()
-        {
-            foreach (var kvp in _playerUnits)
-            {
-                _battleData.initialUnits[kvp.Key] = CloneUnit(kvp.Value);
-            }
-
-            foreach (var kvp in _enemyUnits)
-            {
-                _battleData.initialUnits[kvp.Key] = CloneUnit(kvp.Value);
-            }
-        }
 
         /// <summary>
         /// 保存回合结束状态

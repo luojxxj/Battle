@@ -414,19 +414,19 @@ namespace Server.Battle.Config
     public enum UnitClass
     {
         /// <summary>济世丞 - 战士职业，高生命值和防御力</summary>
-        Warrior = 9,
+        Warrior = 1,
         
         /// <summary>穿云卫 - 法师职业，高法术攻击力</summary>
-        Mage = 10,
+        Mage = 2,
         
         /// <summary>铁壁营 - 坦克职业，超高防御和生命值</summary>
-        Tank = 11,
+        Tank = 3,
         
         /// <summary>韬略使 - 辅助职业，提供支援和治疗</summary>
-        Support = 12,
+        Support = 4,
         
         /// <summary>影刃侍 - 刺客职业，高速度和暴击</summary>
-        Assassin = 13
+        Assassin = 5
     }
 
     /// <summary>

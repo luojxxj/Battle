@@ -74,7 +74,6 @@ namespace Server.Battle.Skill
         
         public List<SkillEffect> effects;            // 技能效果列表
         public List<SkillCondition> conditions;     // 释放条件
-        public SkillUpgrade upgrade;                 // 升级信息
         
         public SkillDefinition()
         {
@@ -136,38 +135,6 @@ namespace Server.Battle.Skill
         // {"conditionType": "SelfHp", "comparison": "<", "value": 0.5} // 自身血量低于50%
         // {"conditionType": "EnemyCount", "comparison": ">=", "value": 2} // 敌人数量>=2
         // {"conditionType": "BuffPresent", "targetAttribute": "poison", "comparison": "==", "value": 1} // 目标有毒状态
-    }
-
-    /// <summary>
-    /// 技能升级信息
-    /// </summary>
-    [Serializable]
-    public class SkillUpgrade
-    {
-        public int maxLevel;                         // 最大等级
-        public List<SkillLevelData> levelData;      // 各等级数据
-        
-        public SkillUpgrade()
-        {
-            levelData = new List<SkillLevelData>();
-        }
-    }
-
-    /// <summary>
-    /// 技能等级数据
-    /// </summary>
-    [Serializable]
-    public class SkillLevelData
-    {
-        public int level;                           // 等级
-        public Dictionary<string, float> valueModifiers; // 数值修正器
-        public List<SkillEffect> additionalEffects; // 额外效果
-        
-        public SkillLevelData()
-        {
-            valueModifiers = new Dictionary<string, float>();
-            additionalEffects = new List<SkillEffect>();
-        }
     }
 
     #endregion
