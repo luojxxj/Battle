@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
+using Battle.Enum;
 using Newtonsoft.Json;
-using Server.Battle.Skill;
 
 namespace Server.Battle.Config
 {
@@ -232,7 +227,7 @@ namespace Server.Battle.Config
                 if (!ValidateSkillConfig(kvp.Value))
                 {
                     errorCount++;
-                    Console.WriteLine($"[SkillConfigLoader] 技能配置验证失败: {kvp.Key} - {kvp.Value.skillName}");
+                    Console.WriteLine($"[SkillConfigLoader] 技能配置验证失败: {kvp.Key} - {kvp.Value.skillId}");
                 }
             }
             
@@ -254,47 +249,12 @@ namespace Server.Battle.Config
                 return false;
             }
             
-            if (string.IsNullOrEmpty(skill.skillName))
-            {
-                Console.WriteLine($"技能名称不能为空: {skill.skillId}");
-                return false;
-            }
-            
             if (skill.effects == null || skill.effects.Count == 0)
             {
                 Console.WriteLine($"技能必须至少有一个效果: {skill.skillId}");
                 return false;
             }
-            
-            // 验证效果配置
-            foreach (var effect in skill.effects)
-            {
-                if (effect.probability < 0 || effect.probability > 1)
-                {
-                    Console.WriteLine($"效果触发概率必须在0-1之间: {skill.skillId}");
-                    return false;
-                }
-                
-                if (effect.duration < 0)
-                {
-                    Console.WriteLine($"持续时间不能为负数: {skill.skillId}");
-                    return false;
-                }
-            }
-            
-            // 验证消耗配置
-            if (skill.cost.value < 0)
-            {
-                Console.WriteLine($"技能消耗不能为负数: {skill.skillId}");
-                return false;
-            }
-            
-            // 验证冷却时间
-            if (skill.cooldown < 0 || skill.cooldown > 10)
-            {
-                Console.WriteLine($"技能冷却时间建议在0-10回合之间: {skill.skillId}");
-            }
-            
+
             return true;
         }
 

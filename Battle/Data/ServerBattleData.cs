@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Server.Battle.Skill;
 
 namespace Server.Battle.Data
@@ -20,7 +18,23 @@ namespace Server.Battle.Data
             Defeat = 2,     // 失败
             Draw = 3        // 平局
         }
-        
+
+
+        public enum ActionType
+        {
+            Attack,       // 攻击
+            UseSkill,     // 使用技能
+            BuffApplied,  // 应用Buff
+            BuffRemoved,  // 移除Buff
+            Heal,         // 治疗
+            Death,        // 死亡
+            Revive,       // 复活
+            Damage,        // 伤害
+            Buff,        // Buff
+            Debuff,      // Debuff
+            StatusEffect, // 状态效果
+        }
+
         #endregion
 
         #region 数据结构
@@ -238,21 +252,6 @@ namespace Server.Battle.Data
             public int team1UnitsRemaining;
             public int team2UnitsRemaining;
             public int winner;
-        }
-
-        public enum ActionType
-        {
-            Attack,       // 攻击
-            UseSkill,     // 使用技能
-            BuffApplied,  // 应用Buff
-            BuffRemoved,  // 移除Buff
-            Heal,         // 治疗
-            Death,        // 死亡
-            Revive,       // 复活
-            Damage,        // 伤害
-            Buff,        // Buff
-            Debuff,      // Debuff
-            StatusEffect, // 状态效果
         }
 
         #endregion

@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Server.Battle.Config;
+using Battle.Enum;
 
 namespace Server.Battle.Skill
 {
@@ -133,7 +130,7 @@ namespace Server.Battle.Skill
                 {
                     new EffectTemplate
                     {
-                        effectType = EffectType.Buff,
+                        effectType = EffectType.AddBuff,
                         targetType = TargetType.Self,
                         defaultParameters = new Dictionary<string, object>
                         {
@@ -155,7 +152,7 @@ namespace Server.Battle.Skill
                 {
                     new EffectTemplate
                     {
-                        effectType = EffectType.Debuff,
+                        effectType = EffectType.AddBuff,
                         targetType = TargetType.SingleEnemy,
                         defaultParameters = new Dictionary<string, object>
                         {
@@ -188,7 +185,7 @@ namespace Server.Battle.Skill
                     },
                     new EffectTemplate
                     {
-                        effectType = EffectType.Debuff,
+                        effectType = EffectType.AddBuff,
                         targetType = TargetType.SingleEnemy,
                         defaultParameters = new Dictionary<string, object>
                         {
@@ -267,13 +264,12 @@ namespace Server.Battle.Skill
                 cost = 30,
                 cooldown = 4,
                 description = "发射闪电链，可以跳跃攻击多个敌人",
-                castTime = 1.5f,
                 effects = new List<SkillEffect>
                 {
                     new SkillEffect
                     {
                         effectId = 1,
-                        effectType = EffectType.Special,
+                        effectType = EffectType.Damage,
                         targetType = TargetType.SingleEnemy,
                         baseValue = 35,
                         scaleAttribute = "attack",
@@ -302,7 +298,7 @@ namespace Server.Battle.Skill
                 {
                     new SkillEffect
                     {
-                        effectType = EffectType.Special,
+                        effectType = EffectType.Damage,
                         targetType = TargetType.SingleEnemy,
                         baseValue = 30,
                         scaleAttribute = "attack",

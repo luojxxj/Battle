@@ -1,59 +1,7 @@
-using System;
-using System.Collections.Generic;
-using Server.Battle.Config;
+using Battle.Enum;
 
 namespace Server.Battle.Skill
 {
-    #region 技能定义相关枚举和接口
-
-    /// <summary>
-    /// 技能类型
-    /// </summary>
-    public enum SkillType
-    {
-        Active = 1,     // 主动技能
-        Passive = 2,    // 被动技能
-        Trigger = 3,    // 触发技能
-        Combo = 4       // 连击技能
-    }
-
-    /// <summary>
-    /// 效果类型
-    /// </summary>
-    public enum EffectType
-    {
-        Damage = 1,           // 伤害
-        Heal = 2,            // 治疗
-        Buff = 3,            // 增益
-        Debuff = 4,          // 减益
-        Shield = 5,          // 护盾
-        Dispel = 6,          // 驱散
-        Steal = 7,           // 偷取
-        Transform = 8,       // 变形
-        Summon = 9,          // 召唤
-        Special = 10         // 特殊效果
-    }
-
-    /// <summary>
-    /// 触发时机
-    /// </summary>
-    public enum TriggerTiming
-    {
-        Immediate = 1,       // 立即
-        BeforeAction = 2,    // 行动前
-        AfterAction = 3,     // 行动后
-        OnDamage = 4,        // 受到伤害时
-        OnHeal = 5,          // 受到治疗时
-        OnDeath = 6,         // 死亡时
-        OnKill = 7,          // 击杀时
-        OnTurnStart = 8,     // 回合开始
-        OnTurnEnd = 9,       // 回合结束
-        OnBuffApply = 10,    // Buff生效时
-        OnBuffExpire = 11    // Buff失效时
-    }
-
-    #endregion
-
     #region 核心数据结构
 
     /// <summary>
@@ -68,9 +16,6 @@ namespace Server.Battle.Skill
         public int cooldown;                         // 冷却时间
         public int cost;                            // 消耗（能量/法力等）
         public string description;                   // 技能描述
-        public string iconPath;                      // 图标路径
-        public string animationName;                 // 动画名称
-        public float castTime;                       // 施法时间
         
         public List<SkillEffect> effects;            // 技能效果列表
         public List<SkillCondition> conditions;     // 释放条件
@@ -91,7 +36,6 @@ namespace Server.Battle.Skill
         public int effectId;                         // 效果ID
         public EffectType effectType;               // 效果类型
         public TargetType targetType;     // 目标选择
-        public TriggerTiming triggerTiming;         // 触发时机
         
         // 数值相关
         public int baseValue;                        // 基础数值
@@ -304,7 +248,7 @@ namespace Server.Battle.Skill
             
             switch (effect.effectType)
             {
-                case EffectType.Buff:
+                case EffectType.AddBuff:
                     // 根据参数设置属性修正
                     if (effect.parameters.ContainsKey("attackBonus"))
                     {
@@ -320,7 +264,7 @@ namespace Server.Battle.Skill
                     }
                     break;
                     
-                case EffectType.Debuff:
+                case EffectType.ChangeAttrPercentage:
                     // 减益效果，使用负值
                     if (effect.parameters.ContainsKey("attackReduction"))
                     {

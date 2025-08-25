@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using Server.Battle.Config;
-using Server.Battle.Data;
+using Battle.Enum;
 using static Server.Battle.Data.ServerBattleData;
 
 namespace Server.Battle.Skill
@@ -106,8 +103,7 @@ namespace Server.Battle.Skill
                         ExecuteHealEffect(caster, target, effect, action);
                         break;
                         
-                    case EffectType.Buff:
-                    case EffectType.Debuff:
+                    case EffectType.AddBuff:
                         ExecuteBuffEffect(caster, target, effect, action);
                         break;
                         
@@ -115,11 +111,11 @@ namespace Server.Battle.Skill
                         ExecuteShieldEffect(caster, target, effect, action);
                         break;
                         
-                    case EffectType.Dispel:
+                    case EffectType.Revive:
                         ExecuteDispelEffect(caster, target, effect, action);
                         break;
                         
-                    case EffectType.Special:
+                    case EffectType.RecordHarm:
                         ExecuteSpecialEffect(caster, target, effect, action, allUnits);
                         break;
                 }
@@ -202,7 +198,7 @@ namespace Server.Battle.Skill
             var buff = _buffManager.AddBuff(target.unitId, effect, caster.unitId, action.skillId);
             action.actualValue = effect.baseValue;
             
-            string effectName = effect.effectType == EffectType.Buff ? "增益" : "减益";
+            string effectName = effect.effectType == EffectType.AddBuff ? "增益" : "减益";
             Console.WriteLine($"[SkillEngine] {caster.unitName} 为 {target.unitName} 施加 {effectName} 效果");
         }
         
@@ -255,9 +251,7 @@ namespace Server.Battle.Skill
             {
                 bool shouldDispel = false;
                 
-                if (dispelPositive && buff.buffType == EffectType.Buff)
-                    shouldDispel = true;
-                if (dispelNegative && buff.buffType == EffectType.Debuff)
+                if (dispelPositive && buff.buffType == EffectType.AddBuff)
                     shouldDispel = true;
                 
                 if (shouldDispel)
@@ -505,8 +499,7 @@ namespace Server.Battle.Skill
             {
                 case EffectType.Damage: return ActionType.Damage;
                 case EffectType.Heal: return ActionType.Heal;
-                case EffectType.Buff: return ActionType.Buff;
-                case EffectType.Debuff: return ActionType.Debuff;
+                case EffectType.AddBuff: return ActionType.Buff;
                 default: return ActionType.StatusEffect;
             }
         }
@@ -564,7 +557,7 @@ namespace Server.Battle.Skill
             // 反弹：为目标添加反弹Buff
             var reflectEffect = new SkillEffect
             {
-                effectType = EffectType.Special,
+                effectType = EffectType.Trigger,
                 duration = effect.duration
             };
             

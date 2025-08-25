@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
-using Server.Battle.Config;
+using Battle.Enum;
 using Server.Battle.Core;
-using Server.Battle.Data;
 using Server.Battle.Skill;
 using static Server.Battle.Data.ServerBattleData;
 
@@ -172,7 +169,7 @@ namespace Server.Battle.Example
             // 创建一个毒伤害效果
             var poisonEffect = new SkillEffect
             {
-                effectType = EffectType.Debuff,
+                effectType = EffectType.AddBuff,
                 duration = 3,
                 canStack = true,
                 maxStacks = 5
@@ -253,7 +250,6 @@ namespace Server.Battle.Example
                         baseValue = 20,
                         scaleAttribute = "attack",
                         scaleValue = 1.0f,
-                        triggerTiming = TriggerTiming.Immediate
                     },
                     // 第二击
                     new SkillEffect
@@ -264,7 +260,6 @@ namespace Server.Battle.Example
                         baseValue = 15,
                         scaleAttribute = "attack",
                         scaleValue = 0.8f,
-                        triggerTiming = TriggerTiming.AfterAction
                     },
                     // 第三击 + 减防Debuff
                     new SkillEffect
@@ -275,12 +270,11 @@ namespace Server.Battle.Example
                         baseValue = 10,
                         scaleAttribute = "attack",
                         scaleValue = 0.6f,
-                        triggerTiming = TriggerTiming.AfterAction
                     },
                     new SkillEffect
                     {
                         effectId = 4,
-                        effectType = EffectType.Debuff,
+                        effectType = EffectType.AddBuff,
                         targetType = TargetType.SingleEnemy,
                         duration = 2,
                         probability = 0.9f
@@ -301,7 +295,6 @@ namespace Server.Battle.Example
                 var effect = comboSkill.effects[i];
                 Console.WriteLine($"  效果{i + 1}: {effect.effectType}");
                 Console.WriteLine($"    基础值: {effect.baseValue}, 缩放: {effect.scaleValue}");
-                Console.WriteLine($"    触发时机: {effect.triggerTiming}");
                 
                 if (effect.probability < 1.0f)
                 {

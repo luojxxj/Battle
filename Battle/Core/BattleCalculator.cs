@@ -1,6 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Battle.Enum;
 using Server.Battle.API;
 using Server.Battle.Config;
 using Server.Battle.Data;
@@ -291,7 +289,7 @@ namespace Server.Battle.Core
 
             // 检查死亡
             CheckUnitDeath(target);
-        }
+        }   
 
         #endregion
 
