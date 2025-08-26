@@ -28,13 +28,11 @@ namespace Server.Battle.Skill
         /// <param name="caster">施法者</param>
         /// <param name="skillId">技能ID</param>
         /// <param name="targets">目标列表</param>
-        /// <param name="allUnits">所有单位</param>
         /// <returns>技能执行结果</returns>
         public SkillExecutionResult ExecuteSkill(
             BattleUnit caster, 
             int skillId, 
-            List<BattleUnit> targets,
-            List<BattleUnit> allUnits)
+            List<BattleUnit> targets)
         {
             var result = new SkillExecutionResult
             {
@@ -53,18 +51,11 @@ namespace Server.Battle.Skill
             
             var skillDef = _skillDefinitions[skillId];
             
-            // 检查释放条件
-            if (!CheckSkillConditions(caster, skillDef, allUnits))
-            {
-                result.errorMessage = "技能释放条件不满足";
-                return result;
-            }
-            
             // 执行技能效果
             foreach (var effect in skillDef.effects)
             {
-                var effectTargets = SelectTargets(caster, effect.targetType, allUnits);
-                var effectActions = ExecuteSkillEffect(caster, effect, effectTargets, allUnits);
+                var effectTargets = SelectTargets(caster, effect.targetType, targets);
+                var effectActions = ExecuteSkillEffect(caster, effect, effectTargets);
                 result.actions.AddRange(effectActions);
             }
             
@@ -78,8 +69,7 @@ namespace Server.Battle.Skill
         private List<BattleAction> ExecuteSkillEffect(
             BattleUnit caster,
             SkillEffect effect,
-            List<BattleUnit> targets,
-            List<BattleUnit> allUnits)
+            List<BattleUnit> targets)
         {
             var actions = new List<BattleAction>();
             
@@ -113,10 +103,6 @@ namespace Server.Battle.Skill
                         
                     case EffectType.Revive:
                         ExecuteDispelEffect(caster, target, effect, action);
-                        break;
-                        
-                    case EffectType.RecordHarm:
-                        ExecuteSpecialEffect(caster, target, effect, action, allUnits);
                         break;
                 }
                 
@@ -265,42 +251,6 @@ namespace Server.Battle.Skill
             Console.WriteLine($"[SkillEngine] {caster.unitName} 驱散了 {target.unitName} 的 {dispelCount} 个效果");
         }
         
-        /// <summary>
-        /// 执行特殊效果
-        /// </summary>
-        private void ExecuteSpecialEffect(
-            BattleUnit caster,
-            BattleUnit target,
-            SkillEffect effect,
-            BattleAction action,
-            List<BattleUnit> allUnits)
-        {
-            // 根据参数执行特殊效果
-            if (effect.parameters.ContainsKey("specialType"))
-            {
-                string specialType = effect.parameters["specialType"].ToString();
-                
-                switch (specialType)
-                {
-                    case "vampiric": // 吸血
-                        ExecuteVampiricEffect(caster, target, effect, action);
-                        break;
-                        
-                    case "chain": // 连锁
-                        ExecuteChainEffect(caster, target, effect, action, allUnits);
-                        break;
-                        
-                    case "reflect": // 反弹
-                        ExecuteReflectEffect(caster, target, effect, action);
-                        break;
-                        
-                    case "resurrection": // 复活
-                        ExecuteResurrectionEffect(caster, target, effect, action);
-                        break;
-                }
-            }
-        }
-        
         #endregion
         
         #region 辅助方法
@@ -410,51 +360,6 @@ namespace Server.Battle.Skill
         }
         
         /// <summary>
-        /// 检查技能释放条件
-        /// </summary>
-        private bool CheckSkillConditions(
-            BattleUnit caster,
-            SkillDefinition skillDef,
-            List<BattleUnit> allUnits)
-        {
-            foreach (var condition in skillDef.conditions)
-            {
-                if (!EvaluateCondition(caster, condition, allUnits))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-        
-        /// <summary>
-        /// 评估单个条件
-        /// </summary>
-        private bool EvaluateCondition(
-            BattleUnit caster,
-            SkillCondition condition,
-            List<BattleUnit> allUnits)
-        {
-            float actualValue = 0f;
-            
-            switch (condition.conditionType)
-            {
-                case "SelfHp":
-                    actualValue = caster.HpPercent;
-                    break;
-                case "EnemyCount":
-                    actualValue = allUnits.Count(u => u.isAlive);
-                    break;
-                case "AllyCount":
-                    actualValue = allUnits.Count(u => u.isAlive);
-                    break;
-                // 可以添加更多条件类型
-            }
-            
-            return CompareValues(actualValue, condition.comparison, condition.value);
-        }
-        
-        /// <summary>
         /// 比较数值
         /// </summary>
         private bool CompareValues(float actual, string comparison, float expected)
@@ -499,94 +404,9 @@ namespace Server.Battle.Skill
             {
                 case EffectType.Damage: return ActionType.Damage;
                 case EffectType.Heal: return ActionType.Heal;
-                case EffectType.AddBuff: return ActionType.Buff;
-                default: return ActionType.StatusEffect;
-            }
-        }
-        
-        #endregion
-        
-        #region 特殊效果实现
-        
-        private void ExecuteVampiricEffect(BattleUnit caster, BattleUnit target, SkillEffect effect, BattleAction action)
-        {
-            // 吸血：造成伤害的同时恢复施法者生命值
-            int damage = CalculateEffectValue(caster, effect);
-            target.currentHp = Math.Max(0, target.currentHp - damage);
-            
-            float vampiricRate = effect.parameters.ContainsKey("vampiricRate") ? 
-                Convert.ToSingle(effect.parameters["vampiricRate"]) : 0.3f;
-            
-            int healAmount = (int)(damage * vampiricRate);
-            caster.currentHp = Math.Min(caster.maxHp, caster.currentHp + healAmount);
-            
-            action.actualValue = damage;
-            Console.WriteLine($"[SkillEngine] {caster.unitName} 吸血攻击，造成 {damage} 伤害，恢复 {healAmount} 生命值");
-        }
-        
-        private void ExecuteChainEffect(BattleUnit caster, BattleUnit target, SkillEffect effect, BattleAction action, List<BattleUnit> allUnits)
-        {
-            // 连锁：攻击会跳跃到其他目标
-            int chainCount = effect.parameters.ContainsKey("chainCount") ? 
-                Convert.ToInt32(effect.parameters["chainCount"]) : 2;
-            
-            float damageReduction = effect.parameters.ContainsKey("damageReduction") ? 
-                Convert.ToSingle(effect.parameters["damageReduction"]) : 0.2f;
-            
-            var enemies = allUnits.Where(u => u.isAlive && u.unitId != target.unitId).ToList();
-            
-            int currentDamage = CalculateEffectValue(caster, effect);
-            target.currentHp = Math.Max(0, target.currentHp - currentDamage);
-            
-            for (int i = 0; i < Math.Min(chainCount, enemies.Count); i++)
-            {
-                var chainTarget = enemies[_random.Next(enemies.Count)];
-                enemies.Remove(chainTarget);
-                
-                currentDamage = (int)(currentDamage * (1 - damageReduction));
-                chainTarget.currentHp = Math.Max(0, chainTarget.currentHp - currentDamage);
-                
-                Console.WriteLine($"[SkillEngine] 连锁攻击 {chainTarget.unitName}，造成 {currentDamage} 伤害");
-            }
-            
-            action.actualValue = CalculateEffectValue(caster, effect);
-        }
-        
-        private void ExecuteReflectEffect(BattleUnit caster, BattleUnit target, SkillEffect effect, BattleAction action)
-        {
-            // 反弹：为目标添加反弹Buff
-            var reflectEffect = new SkillEffect
-            {
-                effectType = EffectType.Trigger,
-                duration = effect.duration
-            };
-            
-            float reflectRatio = effect.parameters.ContainsKey("reflectRatio") ? 
-                Convert.ToSingle(effect.parameters["reflectRatio"]) : 0.5f;
-            
-            reflectEffect.parameters["reflectRatio"] = reflectRatio;
-            reflectEffect.parameters["specialType"] = "reflect";
-            
-            _buffManager.AddBuff(target.unitId, reflectEffect, caster.unitId, action.skillId);
-            action.actualValue = (int)(reflectRatio * 100);
-            
-            Console.WriteLine($"[SkillEngine] {target.unitName} 获得反弹效果，反弹比例 {reflectRatio * 100}%");
-        }
-        
-        private void ExecuteResurrectionEffect(BattleUnit caster, BattleUnit target, SkillEffect effect, BattleAction action)
-        {
-            // 复活：使死亡的单位复活
-            if (!target.isAlive)
-            {
-                target.isAlive = true;
-                int reviveHp = effect.parameters.ContainsKey("reviveHpPercent") ? 
-                    (int)(target.maxHp * Convert.ToSingle(effect.parameters["reviveHpPercent"])) : 
-                    target.maxHp / 2;
-                
-                target.currentHp = reviveHp;
-                action.actualValue = reviveHp;
-                
-                Console.WriteLine($"[SkillEngine] {target.unitName} 复活，恢复 {reviveHp} 生命值");
+                case EffectType.AddBuff: return ActionType.AddBuff;
+                case EffectType.Trigger: return ActionType.Trigger;
+                default: return ActionType.Damage;
             }
         }
         

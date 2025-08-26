@@ -197,6 +197,9 @@ namespace Server.Battle.Core
                 roundNumber = roundNumber
             };
 
+            // 回合开始判定
+            OnRoundStart(roundNumber);
+
             // 按照速度顺序执行每个单位的行动
             foreach (var unit in _turnOrder)
             {
@@ -214,6 +217,9 @@ namespace Server.Battle.Core
                     break;
             }
 
+            //回合结束判定
+            OnRoundEnd(roundNumber);
+
             // 保存回合结束时的单位状态
             SaveRoundEndStates(round);
 
@@ -228,11 +234,7 @@ namespace Server.Battle.Core
         /// </summary>
         protected BattleAction DecideUnitAction(BattleUnit unit, int roundNumber)
         {
-            // 回合开始判定
-            OnRoundStart(roundNumber);
-
             // 判断单位是否可以行动
-
 
             // 判断单位使用技能还是基础攻击
 
@@ -240,7 +242,7 @@ namespace Server.Battle.Core
 
             // 执行技能
             var targets = SelectSkillTargets(unit, selectedSkill);
-            var skillResult = _skillEngine.ExecuteSkill(unit, selectedSkill.skillId, targets, GetAllUnits());
+            var skillResult = _skillEngine.ExecuteSkill(unit, selectedSkill.skillId, targets);
 
             if (skillResult.success && skillResult.actions.Count > 0)
             {
@@ -257,9 +259,6 @@ namespace Server.Battle.Core
                 return mainAction;
             }
 
-            //回合结束判定
-            OnRoundEnd(roundNumber);
-
             // 技能执行失败，使用基础攻击
             return null;
         }
@@ -275,12 +274,8 @@ namespace Server.Battle.Core
             // 执行动作效果
             switch (action.actionType)
             {
-                case ActionType.Attack:
+                case ActionType.Damage:
                     ExecuteDamageAction(source, target, action);
-                    break;
-
-                case ActionType.UseSkill:
-                    ExecuteSkillAction(source, target, action);
                     break;
             }
 
@@ -470,10 +465,8 @@ namespace Server.Battle.Core
 
             if (playerAlive && !enemyAlive)
                 return BattleResult.Victory;
-            else if (!playerAlive && enemyAlive)
-                return BattleResult.Defeat;
             else
-                return BattleResult.Draw;
+                return BattleResult.Defeat;
         }
 
         #endregion

@@ -116,7 +116,7 @@ namespace Server.Battle.Example
             Console.WriteLine($"攻击前 - 玩家HP: {playerUnit.currentHp}, 敌人HP: {enemyUnit.currentHp}");
             
             var targets = new List<BattleUnit> { enemyUnit };
-            var skillResult = skillEngine.ExecuteSkill(playerUnit, 1002, targets, allUnits);
+            var skillResult = skillEngine.ExecuteSkill(playerUnit, 1002, targets);
             
             if (skillResult.success)
             {
@@ -143,7 +143,7 @@ namespace Server.Battle.Example
             // 模拟玩家使用狂暴
             Console.WriteLine("\n2. 玩家使用狂暴技能");
             var selfTargets = new List<BattleUnit> { playerUnit };
-            var rageResult = skillEngine.ExecuteSkill(playerUnit, 1004, selfTargets, allUnits);
+            var rageResult = skillEngine.ExecuteSkill(playerUnit, 1004, selfTargets);
             
             if (rageResult.success)
             {

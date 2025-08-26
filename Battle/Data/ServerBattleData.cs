@@ -16,23 +16,16 @@ namespace Server.Battle.Data
         {
             Victory = 1,    // 胜利
             Defeat = 2,     // 失败
-            Draw = 3        // 平局
         }
 
 
         public enum ActionType
         {
-            Attack,       // 攻击
-            UseSkill,     // 使用技能
-            BuffApplied,  // 应用Buff
-            BuffRemoved,  // 移除Buff
-            Heal,         // 治疗
-            Death,        // 死亡
-            Revive,       // 复活
-            Damage,        // 伤害
-            Buff,        // Buff
-            Debuff,      // Debuff
-            StatusEffect, // 状态效果
+            Damage,          // 伤害
+            Heal,            // 治疗
+            AddBuff,         // 施加状态
+            RemoveBuff,      // 移除状态
+            Trigger,         // 触发
         }
 
         #endregion

@@ -138,13 +138,13 @@ namespace Server.Battle
                     
                     string actionDesc = $"  - {source.unitName} → {target.unitName}";
                     
-                    if (action.actionType == ServerBattleData.ActionType.Attack || action.actionType == ServerBattleData.ActionType.Damage)
+                    if (action.actionType == ActionType.Damage)
                     {
                         actionDesc += $" 造成 {action.actualValue} 点伤害";
                         if (action.isCritical) actionDesc += " (暴击)";
                         if (action.isMiss) actionDesc += " (Miss)";
                     }
-                    else if (action.actionType == ServerBattleData.ActionType.Heal)
+                    else if (action.actionType == ActionType.Heal)
                     {
                         actionDesc += $" 恢复 {action.actualValue} 点生命";
                     }
