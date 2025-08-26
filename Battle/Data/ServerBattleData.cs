@@ -26,6 +26,10 @@ namespace Server.Battle.Data
             AddBuff,         // 施加状态
             RemoveBuff,      // 移除状态
             Trigger,         // 触发
+            Skill,           // 技能
+            Shield,          // 护盾
+            Revive,          // 复活
+            Dispel,          // 驱散
         }
 
         #endregion

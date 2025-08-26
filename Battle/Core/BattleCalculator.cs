@@ -36,7 +36,7 @@ namespace Server.Battle.Core
             _playerUnits = new Dictionary<int, BattleUnit>();
             _enemyUnits = new Dictionary<int, BattleUnit>();
             _turnOrder = new List<BattleUnit>();
-            _skillEngine = new SkillExecutionEngine();
+            _skillEngine = new SkillExecutionEngine(this);
             _skillConfig = SkillConfigManager.Instance;
             _unitSkills = new Dictionary<long, List<int>>();
             _skillCooldowns = new Dictionary<long, Dictionary<int, int>>();
@@ -203,6 +203,7 @@ namespace Server.Battle.Core
             // 按照速度顺序执行每个单位的行动
             foreach (var unit in _turnOrder)
             {
+                Console.WriteLine($"[BattleCalculator] Executing action for unit {unit.unitName}");
                 if (!unit.isAlive) continue;
 
                 var action = DecideUnitAction(unit, roundNumber);
@@ -234,32 +235,56 @@ namespace Server.Battle.Core
         /// </summary>
         protected BattleAction DecideUnitAction(BattleUnit unit, int roundNumber)
         {
+            Console.WriteLine($"[BattleCalculator] All units: {GetAllUnits().Count}");
             // 判断单位是否可以行动
-
-            // 判断单位使用技能还是基础攻击
-
-            var selectedSkill = (SkillDefinition)null;
-
-            // 执行技能
-            var targets = SelectSkillTargets(unit, selectedSkill);
-            var skillResult = _skillEngine.ExecuteSkill(unit, selectedSkill.skillId, targets);
-
-            if (skillResult.success && skillResult.actions.Count > 0)
+            if (!unit.isAlive)
             {
-                // 返回第一个动作（主要动作）
-                var mainAction = skillResult.actions[0];
-
-                // 处理额外动作（如果有）
-                for (int i = 1; i < skillResult.actions.Count; i++)
-                {
-                    // 可以将额外动作添加到当前回合或下一步骤
-                    AddAdditionalAction(skillResult.actions[i]);
-                }
-
-                return mainAction;
+                return null;
             }
 
-            // 技能执行失败，使用基础攻击
+            // 判断单位使用技能还是基础攻击
+            var activeSkillId = unit.SkillId;
+            if (activeSkillId > 0 && !IsSkillOnCooldown((int)unit.unitId, activeSkillId))
+            {
+                var skill = _skillConfig.GetSkillDefinition(activeSkillId);
+                if (skill != null && CanUseSkill(unit, skill))
+                {
+                    var targets = SelectSkillTargets(unit, skill);
+                    var skillResult = _skillEngine.ExecuteSkill(unit, activeSkillId, targets);
+
+                    if (skillResult.success && skillResult.actions.Count > 0)
+                    {
+                        // 返回第一个动作（主要动作）
+                        var mainAction = skillResult.actions[0];
+
+                        // 处理额外动作（如果有）
+                        for (int i = 1; i < skillResult.actions.Count; i++)
+                        {
+                            // 可以将额外动作添加到当前回合或下一步骤
+                            AddAdditionalAction(skillResult.actions[i]);
+                        }
+
+                        return mainAction;
+                    }
+                }
+            }
+
+            // 技能执行失败或没有可用技能，使用基础攻击
+            var attackSkillId = unit.AttackId;
+            if (attackSkillId > 0)
+            {
+                var skill = _skillConfig.GetSkillDefinition(attackSkillId);
+                if (skill != null)
+                {
+                    var targets = SelectSkillTargets(unit, skill);
+                    var skillResult = _skillEngine.ExecuteSkill(unit, attackSkillId, GetAllUnits());
+                    if (skillResult.success && skillResult.actions.Count > 0)
+                    {
+                        return skillResult.actions[0];
+                    }
+                }
+            }
+            
             return null;
         }
 
@@ -277,6 +302,9 @@ namespace Server.Battle.Core
                 case ActionType.Damage:
                     ExecuteDamageAction(source, target, action);
                     break;
+                case ActionType.Skill:
+                    ExecuteSkillAction(source, target, action);
+                    break;
             }
 
             // 更新统计数据
@@ -293,17 +321,38 @@ namespace Server.Battle.Core
         /// <summary>
         /// 执行伤害动作
         /// </summary>
-        private void ExecuteDamageAction(BattleUnit source, List<BattleUnit> target, BattleAction action)
+        private void ExecuteDamageAction(BattleUnit source, List<BattleUnit> targets, BattleAction action)
         {
+            foreach (var target in targets)
+            {
+                if (!target.isAlive)
+                {
+                    continue;
+                }
 
+                // 计算伤害
+                var damage = action.value;
+
+                // 应用伤害
+                target.currentHp -= damage;
+
+                // 更新统计
+                source.totalDamageDealt += damage;
+                target.totalDamageReceived += damage;
+
+                // 记录伤害
+                action.actualValue = damage;
+
+                Console.WriteLine($"[BattleCalculator] {source.unitName} 对 {target.unitName} 造成 {damage} 点伤害");
+            }
         }
 
         /// <summary>
         /// 执行技能动作
         /// </summary>
-        private void ExecuteSkillAction(BattleUnit source, List<BattleUnit> target, BattleAction action)
+        private void ExecuteSkillAction(BattleUnit source, List<BattleUnit> targets, BattleAction action)
         {
-
+            Console.WriteLine($"[BattleCalculator] {source.unitName} 对 {string.Join(", ", targets.Select(t => t.unitName))} 使用技能 {action.skillId}");
         }
 
         #endregion
@@ -355,6 +404,7 @@ namespace Server.Battle.Core
             {
                 var mainEffect = skill.effects[0];
                 targets = SelectTargetsBySelection(caster, mainEffect.targetType, allUnits);
+                Console.WriteLine($"[BattleCalculator] Selected {targets.Count} targets for skill {skill.skillId}");
             }
 
             return targets;
@@ -363,12 +413,47 @@ namespace Server.Battle.Core
         /// <summary>
         /// 根据目标选择类型选择目标
         /// </summary>
-        private List<BattleUnit> SelectTargetsBySelection(
+                public List<BattleUnit> SelectTargetsBySelection(
             BattleUnit caster,
             TargetType targetSelection,
             List<BattleUnit> allUnits)
         {
             var targets = new List<BattleUnit>();
+            var allies = allUnits.Where(u => u.isAlive && _playerUnits.ContainsValue(u)).ToList();
+            var enemies = allUnits.Where(u => u.isAlive && _enemyUnits.ContainsValue(u)).ToList();
+
+            Console.WriteLine($"[BattleCalculator] Selecting targets with type {targetSelection}. Allies: {allies.Count}, Enemies: {enemies.Count}");
+
+            switch (targetSelection)
+            {
+                case TargetType.Self:
+                    targets.Add(caster);
+                    break;
+                case TargetType.EnemyAll:
+                    targets.AddRange(enemies);
+                    break;
+                case TargetType.EnemyRandom:
+                    if (enemies.Count > 0)
+                    {
+                        targets.Add(enemies[_random.Next(enemies.Count)]);
+                    }
+                    break;
+                case TargetType.EnemyLowestHp:
+                    targets.Add(enemies.OrderBy(u => u.currentHp).FirstOrDefault());
+                    break;
+                case TargetType.AllyAll:
+                    targets.AddRange(allies);
+                    break;
+                case TargetType.AllyRandom:
+                    if (allies.Count > 0)
+                    {
+                        targets.Add(allies[_random.Next(allies.Count)]);
+                    }
+                    break;
+                case TargetType.AllyLowestHp:
+                    targets.Add(allies.OrderBy(u => u.currentHp).FirstOrDefault());
+                    break;
+            }
 
             return targets;
         }
@@ -378,11 +463,9 @@ namespace Server.Battle.Core
         /// </summary>
         protected virtual List<BattleUnit> GetAllUnits()
         {
-            // 这里需要根据基类的实际实现来获取所有单位
-            // 示例实现：
             var allUnits = new List<BattleUnit>();
-            // allUnits.AddRange(_playerUnits.Values);
-            // allUnits.AddRange(_enemyUnits.Values);
+            allUnits.AddRange(_playerUnits.Values);
+            allUnits.AddRange(_enemyUnits.Values);
             return allUnits;
         }
 
@@ -526,6 +609,7 @@ namespace Server.Battle.Core
             {
                 if (!EvaluateSkillCondition(unit, condition))
                 {
+                    Console.WriteLine($"[BattleCalculator] Skill {skill.skillId} cannot be used by unit {unit.unitName} because of condition {condition.conditionType}");
                     return false;
                 }
             }
@@ -722,7 +806,7 @@ namespace Server.Battle.Core
         /// </summary>
         private BattleUnit CreatePlayerUnit(Hero hero)
         {
-            var unit =  new BattleUnit
+            var unit = new BattleUnit
             {
                 unitId = hero.Uid,
                 unitName = $"玩家单位{hero.Uid}",
@@ -731,110 +815,48 @@ namespace Server.Battle.Core
                 PassiveSkillIds = hero.PassiveSkillIds,
             };
 
+            var attributeSetters = new Dictionary<AttributeType, Action<BattleUnit, float>>
+            {
+                { AttributeType.Hp, (u, val) => { u.maxHp = (int)val; u.currentHp = (int)val; } },
+                { AttributeType.Attack, (u, val) => u.attack = (int)val },
+                { AttributeType.Defense, (u, val) => u.defense = (int)val },
+                { AttributeType.Speed, (u, val) => u.speed = (int)val },
+                { AttributeType.Mp, (u, val) => u.currentMp = (int)val },
+                { AttributeType.HpRate, (u, val) => u.hpRate = val },
+                { AttributeType.AttackRate, (u, val) => u.attackRate = val },
+                { AttributeType.DefenseRate, (u, val) => u.defenseRate = val },
+                { AttributeType.SpeedRate, (u, val) => u.speedRate = val },
+                { AttributeType.MpRate, (u, val) => u.mpRate = val },
+                { AttributeType.HitRate, (u, val) => u.hitRate = val },
+                { AttributeType.DodgeRate, (u, val) => u.dodgeRate = val },
+                { AttributeType.RetaliateRate, (u, val) => u.retaliateRate = val },
+                { AttributeType.ResistRetaliateRate, (u, val) => u.resistRetaliateRate = val },
+                { AttributeType.ComboRate, (u, val) => u.comboRate = val },
+                { AttributeType.ResistComboRate, (u, val) => u.resistComboRate = val },
+                { AttributeType.FinalDamageRate, (u, val) => u.finalDamageRate = val },
+                { AttributeType.FinalReduceRate, (u, val) => u.finalReduceRate = val },
+                { AttributeType.FinalSkillDamageRate, (u, val) => u.finalSkillDamageRate = val },
+                { AttributeType.FinalSkillReduceRate, (u, val) => u.finalSkillReduceRate = val },
+                { AttributeType.CriticalRate, (u, val) => u.criticalRate = val },
+                { AttributeType.ResistCriticalRate, (u, val) => u.resistCriticalRate = val },
+                { AttributeType.CriticalDamageRate, (u, val) => u.criticalDamageRate = val },
+                { AttributeType.ResistCriticalDamageRate, (u, val) => u.resistCriticalDamageRate = val },
+                { AttributeType.ControlCountEnhance, (u, val) => u.controlCountEnhance = (int)val },
+                { AttributeType.ControlCountReduce, (u, val) => u.controlCountReduce = (int)val },
+                { AttributeType.VipDamageRate, (u, val) => u.vipDamageRate = val },
+                { AttributeType.VipReduceRate, (u, val) => u.vipReduceRate = val },
+                { AttributeType.HealedRate, (u, val) => u.healedRate = val },
+                { AttributeType.HealRate, (u, val) => u.healRate = val },
+                { AttributeType.BloodSuckRate, (u, val) => u.bloodSuckRate = val },
+                { AttributeType.BlockRate, (u, val) => u.blockRate = val },
+                { AttributeType.PierceRate, (u, val) => u.pierceRate = val }
+            };
+
             foreach (var attr in hero.AttrDic)
             {
-                switch ((AttributeType)attr.Key)
+                if (attributeSetters.TryGetValue((AttributeType)attr.Key, out var setter))
                 {
-                    case AttributeType.Hp:
-                        unit.maxHp = (int)attr.Value;
-                        unit.currentHp = unit.maxHp;
-                        break;
-                    case AttributeType.Attack:
-                        unit.attack = (int)attr.Value;
-                        break;
-                    case AttributeType.Defense:
-                        unit.defense = (int)attr.Value;
-                        break;
-                    case AttributeType.Speed:
-                        unit.speed = (int)attr.Value;
-                        break;
-                    case AttributeType.Mp:
-                        unit.currentMp = (int)attr.Value;
-                        break;
-                    case AttributeType.HpRate:
-                        unit.hpRate = attr.Value;
-                        break;
-                    case AttributeType.AttackRate:
-                        unit.attackRate = attr.Value;
-                        break;
-                    case AttributeType.DefenseRate:
-                        unit.defenseRate = attr.Value;
-                        break;
-                    case AttributeType.SpeedRate:
-                        unit.speedRate = attr.Value;
-                        break;
-                    case AttributeType.MpRate:
-                        unit.mpRate = attr.Value;
-                        break;
-                    case AttributeType.HitRate:
-                        unit.hitRate = attr.Value;
-                        break;
-                    case AttributeType.DodgeRate:
-                        unit.dodgeRate = attr.Value;
-                        break;
-                    case AttributeType.RetaliateRate:
-                        unit.retaliateRate = attr.Value;
-                        break;
-                    case AttributeType.ResistRetaliateRate:
-                        unit.resistRetaliateRate = attr.Value;
-                        break;
-                    case AttributeType.ComboRate:
-                        unit.comboRate = attr.Value;
-                        break;
-                    case AttributeType.ResistComboRate:
-                        unit.resistComboRate = attr.Value;
-                        break;
-                    case AttributeType.FinalDamageRate:
-                        unit.finalDamageRate = attr.Value;
-                        break;
-                    case AttributeType.FinalReduceRate:
-                        unit.finalReduceRate = attr.Value;
-                        break;
-                    case AttributeType.FinalSkillDamageRate:
-                        unit.finalSkillDamageRate = attr.Value;
-                        break;
-                    case AttributeType.FinalSkillReduceRate:
-                        unit.finalSkillReduceRate = attr.Value;
-                        break;
-                    case AttributeType.CriticalRate:
-                        unit.criticalRate = attr.Value;
-                        break;
-                    case AttributeType.ResistCriticalRate:
-                        unit.resistCriticalRate = attr.Value;
-                        break;
-                    case AttributeType.CriticalDamageRate:
-                        unit.criticalDamageRate = attr.Value;
-                        break;
-                    case AttributeType.ResistCriticalDamageRate:
-                        unit.resistCriticalDamageRate = attr.Value;
-                        break;
-                    case AttributeType.ControlCountEnhance:
-                        unit.controlCountEnhance = (int)attr.Value;
-                        break;
-                    case AttributeType.ControlCountReduce:
-                        unit.controlCountReduce = (int)attr.Value;
-                        break;
-                    case AttributeType.VipDamageRate:
-                        unit.vipDamageRate = attr.Value;
-                        break;
-                    case AttributeType.VipReduceRate:
-                        unit.vipReduceRate = attr.Value;
-                        break;
-                    case AttributeType.HealedRate:
-                        unit.healedRate = attr.Value;
-                        break;
-                    case AttributeType.HealRate:
-                        unit.healRate = attr.Value;
-                        break;
-                    case AttributeType.BloodSuckRate:
-                        unit.bloodSuckRate = attr.Value;
-                        break;
-                    case AttributeType.BlockRate:
-                        unit.blockRate = attr.Value;
-                        break;
-                    case AttributeType.PierceRate:
-                        unit.pierceRate = attr.Value;
-                        break;
+                    setter(unit, attr.Value);
                 }
             }
 

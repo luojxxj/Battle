@@ -33,7 +33,6 @@ namespace Server.Battle
             await SimulateBattleRequests();
 
             Console.WriteLine("按任意键退出...");
-            Console.ReadKey();
         }
 
         /// <summary>

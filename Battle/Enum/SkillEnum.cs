@@ -33,6 +33,8 @@ namespace Battle.Enum
         Taunt = 14,         // 嘲讽
         MinHpHeal = 15,      // 最小血量治疗
         RecordHarm = 16,      // 记录伤害
+        Dispel = 17,           // 驱散
+        Debuff = 18,           // 减益
     }
 
     /// <summary>
@@ -201,5 +203,20 @@ namespace Battle.Enum
 
         /// <summary>我方攻击力最高 - 选择友方攻击力最高的单位</summary>
         AllyHighestAttack = 20,
+        
+        /// <summary>敌方全体</summary>
+        EnemyAll = 21,
+
+        /// <summary>敌方随机</summary>
+        EnemyRandom = 22,
+
+        /// <summary>敌方血量最低</summary>
+        EnemyLowestHp = 23,
+
+        /// <summary>友方全体</summary>
+        AllyAll = 24,
+
+        /// <summary>友方随机</summary>
+        AllyRandom = 25,
     }
 }

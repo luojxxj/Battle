@@ -1,4 +1,5 @@
 using Battle.Enum;
+using Server.Battle.Core;
 using static Server.Battle.Data.ServerBattleData;
 
 namespace Server.Battle.Skill
@@ -12,12 +13,14 @@ namespace Server.Battle.Skill
         private BuffManager _buffManager;
         private Random _random;
         private Dictionary<int, SkillDefinition> _skillDefinitions;
-        
-        public SkillExecutionEngine()
+        private BattleCalculator _battleCalculator;
+
+        public SkillExecutionEngine(BattleCalculator battleCalculator)
         {
             _buffManager = new BuffManager();
             _random = new Random();
             _skillDefinitions = new Dictionary<int, SkillDefinition>();
+            _battleCalculator = battleCalculator;
         }
         
         #region 技能执行核心方法
@@ -50,11 +53,12 @@ namespace Server.Battle.Skill
             }
             
             var skillDef = _skillDefinitions[skillId];
+            Console.WriteLine($"[SkillExecutionEngine] Executing skill {skillDef.skillName} ({skillId}) for {caster.unitName}");
             
             // 执行技能效果
             foreach (var effect in skillDef.effects)
             {
-                var effectTargets = SelectTargets(caster, effect.targetType, targets);
+                var effectTargets = _battleCalculator.SelectTargetsBySelection(caster, effect.targetType, targets);
                 var effectActions = ExecuteSkillEffect(caster, effect, effectTargets);
                 result.actions.AddRange(effectActions);
             }
@@ -238,7 +242,13 @@ namespace Server.Battle.Skill
                 bool shouldDispel = false;
                 
                 if (dispelPositive && buff.buffType == EffectType.AddBuff)
+                {
                     shouldDispel = true;
+                }
+                else if (dispelNegative && buff.buffType == EffectType.RemoveBuff)
+                {
+                    shouldDispel = true;
+                }
                 
                 if (shouldDispel)
                 {
@@ -312,52 +322,7 @@ namespace Server.Battle.Skill
         /// <summary>
         /// 选择目标
         /// </summary>
-        private List<BattleUnit> SelectTargets(
-            BattleUnit caster,
-            TargetType targetType,
-            List<BattleUnit> allUnits)
-        {
-            var targets = new List<BattleUnit>();
-            var enemies = allUnits.Where(u => u.isAlive).ToList();
-            var allies = allUnits.Where(u => u.isAlive).ToList();
-            
-            switch (targetType)
-            {
-                case TargetType.Self:
-                    targets.Add(caster);
-                    break;
-                    
-                case TargetType.SingleEnemy:
-                    if (enemies.Count > 0)
-                        targets.Add(enemies[_random.Next(enemies.Count)]);
-                    break;
-                    
-                case TargetType.AllEnemies:
-                    targets.AddRange(enemies);
-                    break;
-                    
-                case TargetType.SingleAlly:
-                    if (allies.Count > 0)
-                        targets.Add(allies[_random.Next(allies.Count)]);
-                    break;
-                    
-                case TargetType.AllAllies:
-                    targets.AddRange(allies);
-                    break;
-                    
-                case TargetType.AllyLowestHp:
-                    if (enemies.Count > 0)
-                        targets.Add(enemies.OrderBy(u => u.HpPercent).First());
-                    break;
-                    
-                case TargetType.EnemyHighestCurrentHp:
-                    if (enemies.Count > 0)
-                        targets.Add(enemies.OrderByDescending(u => u.HpPercent).First());
-                    break;
-            }
-            
-            return targets;
-        }
+        
         
         /// <summary>
         /// 比较数值
@@ -406,6 +371,9 @@ namespace Server.Battle.Skill
                 case EffectType.Heal: return ActionType.Heal;
                 case EffectType.AddBuff: return ActionType.AddBuff;
                 case EffectType.Trigger: return ActionType.Trigger;
+                case EffectType.Shield: return ActionType.Shield;
+                case EffectType.Revive: return ActionType.Revive;
+                case EffectType.Dispel: return ActionType.Dispel;
                 default: return ActionType.Damage;
             }
         }

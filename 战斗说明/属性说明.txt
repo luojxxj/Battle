@@ -1,0 +1,33 @@
+public int maxHp;              // 最大血量
+public int attack;             // 攻击力
+public int defense;            // 防御力
+public int speed;              // 速度
+public int currentMp;         // 当前怒气值
+public float hpRate;         // 生命百分比加成
+public float attackRate;       // 攻击百分比加成
+public float defenseRate;      // 防御百分比加成
+public float speedRate;        // 速度百分比加成
+public float mpRate;         // 怒气回复百分比加成
+public float hitRate = 1f;         // 命中率加成
+public float dodgeRate;      // 闪避率加成
+public float retaliateRate = 0.1f;     // 反击率加成
+public float resistRetaliateRate; // 抵抗反击率加成
+public float comboRate = 0.1f;        // 连击率加成
+public float resistComboRate;   // 抵抗连击率加成
+public float finalDamageRate;   // 最终伤害加成
+public float finalReduceRate;   // 最终伤害减免加成
+public float finalSkillDamageRate; // 最终技能伤害加成
+public float finalSkillReduceRate; // 最终技能伤害减免加成
+public float criticalRate; // 暴击率
+public float resistCriticalRate; // 抵抗暴击率
+public float criticalDamageRate = 1.5f; // 暴击伤害倍率
+public float resistCriticalDamageRate; // 抵抗暴击伤害倍率
+public int controlCountEnhance; // 控制次数增强
+public int controlCountReduce; // 控制次数减免
+public float vipDamageRate; // VIP伤害加成
+public float vipReduceRate; // VIP伤害减免
+public float healedRate; // 受疗加成
+public float healRate; // 治疗加成
+public float bloodSuckRate; // 吸血倍率
+public float blockRate; // 格挡率
+public float pierceRate; // 穿透率
