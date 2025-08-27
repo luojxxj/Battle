@@ -22,7 +22,7 @@ namespace Server.Battle.Config
         /// <param name="critical"></param>
         /// <param name="hit"></param>
         /// <returns>创建技能</returns>
-        public static SkillConfigData CreateSkill(int skillId, SkillType skillType, RevolutionType revolutionType, int revolutionCost, TargetType targetType, int targetCount, List<SkillEffectData>effectList, int priority, bool critical, bool hit)
+        public static SkillConfigData CreateSkill(int skillId, SkillType skillType, RevolutionType revolutionType, int revolutionCost, TargetType targetType, int targetCount, List<EffectData>effectList, int priority, bool critical, bool hit)
         {
             return new SkillConfigData
             {
@@ -32,9 +32,9 @@ namespace Server.Battle.Config
                 priority = 1,
                 targetType = TargetType.SingleEnemy,
                 targetCount = 1,
-                effects = new List<SkillEffectData>
+                effects = new List<EffectData>
                 {
-                    new SkillEffectData
+                    new EffectData
                     {
                         effectType = EffectType.Damage,
                         param = new List<int> { 1,1,1,1 },

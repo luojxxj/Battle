@@ -1,317 +1,223 @@
 [
-  {
-    "skillId": 1001,
-    "skillName": "普通攻击",
-    "description": "对单个敌人造成物理伤害",
-    "skillType": "Active",
-    "cost": {
-      "type": "Mp",
-      "value": 0
-    },
-    "cooldown": 0,
-    "priority": 1,
-    "targetType": "SingleEnemy",
-    "maxTargets": 1,
-    "conditions": [],
-    "effects": [
-      {
-        "effectType": "Damage",
-        "probability": 1.0,
-        "effectId": "",
-        "baseValue": 20,
-        "scaleType": "Attack",
-        "scaleValue": 1.0,
-        "canCrit": true,
-        "element": "Physical",
-        "ignoreDefense": false,
-        "buffId": "",
-        "duration": 0,
-        "stackType": "None",
-        "maxStacks": 1,
-        "tickDamage": 0,
-        "attributeModifiers": [],
-        "specialEffect": null
-      }
-    ],
-    "aiConfig": {
-      "selfHpThreshold": 0.0,
-      "enemyHpThreshold": 1.0,
-      "minEnemyCount": 1,
-      "minAllyCount": 0,
-      "useProbability": 1.0,
-      "priorityModifier": 0.0,
-      "targetPreference": "LowestHp"
-    }
-  },
-  {
-    "skillId": 1002,
-    "skillName": "火球术",
-    "description": "造成火焰伤害，有概率造成燃烧效果",
-    "skillType": "Active",
-    "cost": {
-      "type": "Mp",
-      "value": 20
-    },
-    "cooldown": 2,
-    "priority": 3,
-    "targetType": "SingleEnemy",
-    "maxTargets": 1,
-    "conditions": [],
-    "effects": [
-      {
-        "effectType": "Damage",
-        "probability": 1.0,
-        "effectId": "",
-        "baseValue": 35,
-        "scaleType": "MagicAttack",
-        "scaleValue": 1.2,
-        "canCrit": true,
-        "element": "Fire",
-        "ignoreDefense": false,
-        "buffId": "",
-        "duration": 0,
-        "stackType": "None",
-        "maxStacks": 1,
-        "tickDamage": 0,
-        "attributeModifiers": [],
-        "specialEffect": null
-      },
-      {
-        "effectType": "AddBuff",
-        "probability": 0.8,
-        "effectId": "",
-        "baseValue": 0,
-        "scaleType": "Attack",
-        "scaleValue": 0.0,
-        "canCrit": false,
-        "element": "Fire",
-        "ignoreDefense": false,
-        "buffId": "burn",
-        "duration": 3,
-        "stackType": "Refresh",
-        "maxStacks": 5,
-        "tickDamage": 8,
-        "attributeModifiers": [],
-        "specialEffect": null
-      }
-    ],
-    "aiConfig": {
-      "selfHpThreshold": 0.0,
-      "enemyHpThreshold": 0.7,
-      "minEnemyCount": 1,
-      "minAllyCount": 0,
-      "useProbability": 0.8,
-      "priorityModifier": 0.2,
-      "targetPreference": "LowestHp"
-    }
-  },
-  {
-    "skillId": 1003,
-    "skillName": "群体火焰",
-    "description": "对所有敌人造成火焰伤害",
-    "skillType": "Active",
-    "cost": {
-      "type": "Mp",
-      "value": 40
-    },
-    "cooldown": 4,
-    "priority": 5,
-    "targetType": "AllEnemies",
-    "maxTargets": 6,
-    "conditions": [
-      {
-        "conditionType": "EnemyCount",
-        "comparison": "GreaterEqual",
-        "value": 2,
-        "targetTag": ""
-      }
-    ],
-    "effects": [
-      {
-        "effectType": "Damage",
-        "probability": 1.0,
-        "effectId": "",
-        "baseValue": 25,
-        "scaleType": "MagicAttack",
-        "scaleValue": 0.8,
-        "canCrit": true,
-        "element": "Fire",
-        "ignoreDefense": false,
-        "buffId": "",
-        "duration": 0,
-        "stackType": "None",
-        "maxStacks": 1,
-        "tickDamage": 0,
-        "attributeModifiers": [],
-        "specialEffect": null
-      }
-    ],
-    "aiConfig": {
-      "selfHpThreshold": 0.0,
-      "enemyHpThreshold": 1.0,
-      "minEnemyCount": 2,
-      "minAllyCount": 0,
-      "useProbability": 0.9,
-      "priorityModifier": 0.5,
-      "targetPreference": "Random"
-    }
-  },
-  {
-    "skillId": 1004,
-    "skillName": "治疗术",
-    "description": "恢复单个队友的生命值",
-    "skillType": "Active",
-    "cost": {
-      "type": "Mp",
-      "value": 25
-    },
-    "cooldown": 1,
-    "priority": 2,
-    "targetType": "SingleAlly",
-    "maxTargets": 1,
-    "conditions": [],
-    "effects": [
-      {
-        "effectType": "Heal",
-        "probability": 1.0,
-        "effectId": "",
-        "baseValue": 30,
-        "scaleType": "MagicAttack",
-        "scaleValue": 0.8,
-        "canCrit": false,
-        "element": "Light",
-        "ignoreDefense": false,
-        "buffId": "",
-        "duration": 0,
-        "stackType": "None",
-        "maxStacks": 1,
-        "tickDamage": 0,
-        "attributeModifiers": [],
-        "specialEffect": null
-      }
-    ],
-    "aiConfig": {
-      "selfHpThreshold": 0.5,
-      "enemyHpThreshold": 1.0,
-      "minEnemyCount": 0,
-      "minAllyCount": 1,
-      "useProbability": 0.9,
-      "priorityModifier": 0.8,
-      "targetPreference": "LowestHp"
-    }
-  },
-  {
-    "skillId": 1005,
-    "skillName": "力量祝福",
-    "description": "增加队友的攻击力",
-    "skillType": "Active",
-    "cost": {
-      "type": "Mp",
-      "value": 15
-    },
-    "cooldown": 3,
-    "priority": 2,
-    "targetType": "SingleAlly",
-    "maxTargets": 1,
-    "conditions": [
-      {
-        "conditionType": "HasBuff",
-        "comparison": "Equal",
-        "value": 0,
-        "targetTag": "strength_buff"
-      }
-    ],
-    "effects": [
-      {
-        "effectType": "AddBuff",
-        "probability": 1.0,
-        "effectId": "",
-        "baseValue": 0,
-        "scaleType": "Attack",
-        "scaleValue": 0.0,
-        "canCrit": false,
-        "element": "Neutral",
-        "ignoreDefense": false,
-        "buffId": "strength_buff",
-        "duration": 5,
-        "stackType": "Refresh",
-        "maxStacks": 1,
-        "tickDamage": 0,
-        "attributeModifiers": [
-          {
-            "attributeType": "Attack",
-            "modifierType": "Add",
-            "value": 15,
-            "isPercent": false
-          }
+    {
+        "skillId": 3550101,
+        "skillType": 1,
+        "revolutionType": 0,
+        "revolutionCost": 0,
+        "targetType": 2,
+        "targetCount": 1,
+        "effects": [
+            {
+                "effectType": 1,
+                "param": [
+                    10000,
+                    0,
+                    1,
+                    1,
+                    1
+                ]
+            }
         ],
-        "specialEffect": null
-      }
-    ],
-    "aiConfig": {
-      "selfHpThreshold": 0.0,
-      "enemyHpThreshold": 1.0,
-      "minEnemyCount": 0,
-      "minAllyCount": 1,
-      "useProbability": 0.3,
-      "priorityModifier": -0.2,
-      "targetPreference": "Strongest"
-    }
-  },
-  {
-    "skillId": 1006,
-    "skillName": "吸血攻击",
-    "description": "攻击敌人并恢复自身生命值",
-    "skillType": "Active",
-    "cost": {
-      "type": "Mp",
-      "value": 30
+        "priority": 1,
+        "critical": false,
+        "hit": false
     },
-    "cooldown": 3,
-    "priority": 4,
-    "targetType": "SingleEnemy",
-    "maxTargets": 1,
-    "conditions": [
-      {
-        "conditionType": "SelfHp",
-        "comparison": "Less",
-        "value": 0.6,
-        "targetTag": ""
-      }
-    ],
-    "effects": [
-      {
-        "effectType": "Damage",
-        "probability": 1.0,
-        "effectId": "",
-        "baseValue": 28,
-        "scaleType": "Attack",
-        "scaleValue": 1.1,
-        "canCrit": true,
-        "element": "Dark",
-        "ignoreDefense": false,
-        "buffId": "",
-        "duration": 0,
-        "stackType": "None",
-        "maxStacks": 1,
-        "tickDamage": 0,
-        "attributeModifiers": [],
-        "specialEffect": {
-          "effectType": "Vampiric",
-          "parameters": {
-            "healPercent": 0.5
-          }
-        }
-      }
-    ],
-    "aiConfig": {
-      "selfHpThreshold": 0.6,
-      "enemyHpThreshold": 1.0,
-      "minEnemyCount": 1,
-      "minAllyCount": 0,
-      "useProbability": 0.8,
-      "priorityModifier": 0.6,
-      "targetPreference": "HighestHp"
+    {
+        "skillId": 3550102,
+        "skillType": 2,
+        "revolutionType": 0,
+        "revolutionCost": 100,
+        "targetType": 7,
+        "targetCount": 12,
+        "effects": [
+            {
+                "effectType": 3,
+                "param": [
+                    35501021
+                ]
+            },
+            {
+                "effectType": 3,
+                "param": [
+                    35501022
+                ]
+            },
+            {
+                "effectType": 3,
+                "param": [
+                    35501023
+                ]
+            }
+        ],
+        "priority": 1,
+        "critical": false,
+        "hit": false
+    },
+    {
+        "skillId": 3550103,
+        "skillType": 3,
+        "revolutionType": 0,
+        "revolutionCost": 0,
+        "targetType": 1,
+        "targetCount": 6,
+        "effects": [
+            {
+                "effectType": 3,
+                "param": [
+                    35501031
+                ]
+            },
+            {
+                "effectType": 3,
+                "param": [
+                    35501032
+                ]
+            }
+        ],
+        "priority": 1,
+        "critical": false,
+        "hit": false
+    },
+    {
+        "skillId": 3550104,
+        "skillType": 4,
+        "revolutionType": 0,
+        "revolutionCost": 0,
+        "targetType": 0,
+        "targetCount": 1,
+        "effects": [
+            {
+                "effectType": 6,
+                "param": [
+                    1001,
+                    1000,
+                    1,
+                    0,
+                    1,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            {
+                "effectType": 6,
+                "param": [
+                    1002,
+                    1000,
+                    1,
+                    0,
+                    1,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            {
+                "effectType": 7,
+                "param": [
+                    3019,
+                    5000,
+                    1,
+                    0,
+                    1,
+                    0,
+                    0,
+                    0
+                ]
+            }
+        ],
+        "priority": 1,
+        "critical": false,
+        "hit": false
+    },
+    {
+        "skillId": 3550105,
+        "skillType": 3,
+        "revolutionType": 0,
+        "revolutionCost": 0,
+        "targetType": 1,
+        "targetCount": 6,
+        "effects": [
+            {
+                "effectType": 3,
+                "param": [
+                    34201051
+                ]
+            }
+        ],
+        "priority": 1,
+        "critical": false,
+        "hit": false
+    },
+    {
+        "skillId": 3420101,
+        "skillType": 1,
+        "revolutionType": 0,
+        "revolutionCost": 0,
+        "targetType": 2,
+        "targetCount": 1,
+        "effects": [
+            {
+                "effectType": 1,
+                "param": [
+                    10000,
+                    0,
+                    1,
+                    1,
+                    1
+                ]
+            }
+        ],
+        "priority": 1,
+        "critical": false,
+        "hit": false
+    },
+    {
+        "skillId": 3420102,
+        "skillType": 2,
+        "revolutionType": 0,
+        "revolutionCost": 100,
+        "targetType": 2,
+        "targetCount": 6,
+        "effects": [
+            {
+                "effectType": 1,
+                "param": [
+                    12000,
+                    0,
+                    1,
+                    6,
+                    1
+                ]
+            }
+        ],
+        "priority": 1,
+        "critical": false,
+        "hit": false
+    },
+    {
+        "skillId": 3420103,
+        "skillType": 3,
+        "revolutionType": 0,
+        "revolutionCost": 0,
+        "targetType": 2,
+        "targetCount": 6,
+        "effects": [
+            {
+                "effectType": 3,
+                "param": [
+                    34201031
+                ]
+            },
+            {
+                "effectType": 3,
+                "param": [
+                    34201032
+                ]
+            }
+        ],
+        "priority": 1,
+        "critical": false,
+        "hit": false
     }
-  }
 ]

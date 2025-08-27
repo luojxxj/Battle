@@ -1,0 +1,204 @@
+﻿[
+    {
+        "triggerId": 35501031,
+        "triggerList": [
+            {
+                "confition": 1001,
+                "param": [
+                    1,
+                    6,
+                    -1,
+                    4000
+                ]
+            }
+        ],
+        "effList": [
+            {
+                "effectType": 7,
+                "param": [
+                    3018,
+                    1000,
+                    1,
+                    1,
+                    6,
+                    0,
+                    0,
+                    0
+                ]
+            }
+        ],
+        "triggerWeight": 10000
+    },
+    {
+        "triggerId": 35501032,
+        "triggerList": [
+            {
+                "confition": 1005,
+                "param": [
+                    1,
+                    2
+                ]
+            },
+            {
+                "confition": 1001,
+                "param": [
+                    1,
+                    6,
+                    1,
+                    4000
+                ]
+            }
+        ],
+        "effList": [
+            {
+                "effectType": 7,
+                "param": [
+                    3018,
+                    2000,
+                    1,
+                    1,
+                    6,
+                    0,
+                    0,
+                    0
+                ]
+            }
+        ],
+        "triggerWeight": 10000
+    },
+    {
+        "triggerId": 35501033,
+        "triggerList": [
+            {
+                "confition": 1001,
+                "param": [
+                    1,
+                    6,
+                    1,
+                    4000
+                ]
+            }
+        ],
+        "triggerWeight": 10000
+    },
+    {
+        "triggerId": 35501034,
+        "triggerList": [
+            {
+                "confition": 1005,
+                "param": [
+                    1,
+                    2
+                ]
+            },
+            {
+                "confition": 1001,
+                "param": [
+                    1,
+                    6,
+                    1,
+                    6000
+                ]
+            }
+        ],
+        "triggerWeight": 10000
+    },
+    {
+        "triggerId": 35501035,
+        "triggerList": [
+            {
+                "confition": 1009,
+                "param": [
+                    0
+                ]
+            },
+            {
+                "confition": 1001,
+                "param": [
+                    1,
+                    6,
+                    -1,
+                    5000
+                ]
+            }
+        ],
+        "effList": [
+            {
+                "effectType": 7,
+                "param": [
+                    3019,
+                    3000,
+                    1,
+                    0,
+                    1,
+                    0,
+                    0,
+                    0
+                ]
+            }
+        ],
+        "triggerWeight": 10000
+    },
+    {
+        "triggerId": 34201031,
+        "triggerList": [
+            {
+                "confition": 1020,
+                "param": [
+                    0
+                ]
+            }
+        ],
+        "effList": [
+            {
+                "effectType": 6,
+                "param": [
+                    1003,
+                    300,
+                    -1,
+                    2,
+                    6,
+                    0,
+                    0,
+                    0
+                ]
+            }
+        ],
+        "triggerWeight": 10000
+    },
+    {
+        "triggerId": 34201032,
+        "triggerList": [
+            {
+                "confition": 1020,
+                "param": [
+                    0
+                ]
+            },
+            {
+                "confition": 1005,
+                "param": [
+                    2,
+                    6,
+                    1
+                ]
+            }
+        ],
+        "effList": [
+            {
+                "effectType": 6,
+                "param": [
+                    1003,
+                    200,
+                    -1,
+                    2,
+                    6,
+                    0,
+                    0,
+                    0
+                ]
+            }
+        ],
+        "triggerWeight": 10000
+    }
+]

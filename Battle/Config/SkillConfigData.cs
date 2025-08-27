@@ -29,7 +29,7 @@ namespace Server.Battle.Config
         public int targetCount;
         
         /// <summary>技能效果列表，一个技能可以包含多种效果</summary>
-        public List<SkillEffectData> effects;
+        public List<EffectData> effects;
 
         /// <summary>优先级</summary>
         public int priority;
@@ -42,17 +42,54 @@ namespace Server.Battle.Config
     }
 
     /// <summary>
-    /// 技能效果配置
+    /// Buff配置数据
+    /// </summary>
+    [Serializable]
+    public class BuffConfigData
+    {
+        public int buffId;
+        public BuffType buffType;
+        public bool canRemove;
+        public int conRound;
+        public bool canStack;
+        public int stackLimit;
+        public List<EffectData> effectList;
+        public List<EffectData> endList;
+    }
+
+    /// <summary>
+    /// 效果配置
     /// 定义技能可以产生的各种效果，包括伤害、治疗、Buff等
     /// 一个技能可以包含多个效果，每个效果都有独立的触发概率
     /// </summary>
     [Serializable]
-    public class SkillEffectData
+    public class EffectData
     {
         /// <summary>效果类型（伤害、治疗、Buff、Debuff等）</summary>
         public EffectType effectType;
 
         /// <summary>效果参数</summary>
+        public List<int> param;
+    }
+
+    /// <summary>
+    /// 触发器配置
+    /// </summary>
+    [Serializable]
+    public class TriggerConfigData
+    {
+        public int triggerId;
+        public List<ConditionData> triggerList;
+        public List<EffectData> effectList;
+        public int triggerWeight;
+    }
+
+    /// <summary>
+    /// 条件配置
+    /// </summary>
+    public class ConditionData
+    {
+        public ConditionType conditionType;
         public List<int> param;
     }
 

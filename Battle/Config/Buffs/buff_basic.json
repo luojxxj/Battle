@@ -1,46 +1,187 @@
 ﻿[
     {
-        "buffId": "Regeneration",
-        "buffName": "再生",
-        "description": "每回合恢复生命值，持续3回合。",
-        "buffType": 2, // Heal（对应EffectType枚举值）
-        "isVisible": true,
-        "icon": "buff_regen.png",
-        "maxStacks": 1,
-        "defaultDuration": 3,
-        "stackType": 1, // Stack（对应StackType枚举值）
-        "dispelType": "Magic",
-        "immunityTags": [ "Poison", "Burn" ],
-        "tickEffect": {
-            "effectType": 2, // Heal
-            "damageType": 0, // 可选，视DamageType定义
-            "probability": 1.0,
-            "effectId": "regen_tick",
-            "baseValue": 50,
-            "scaleType": 0,
-            "scaleValue": 0.0,
-            "canCrit": false,
-            "element": 0,
-            "ignoreDefense": false,
-            "ignoreResistance": false,
-            "buffId": "",
-            "duration": 0,
-            "stackType": 0,
-            "maxStacks": 0,
-            "tickDamage": 0,
-            "effectRange": 0,
-            "delayRounds": 0,
-            "attributeModifiers": [],
-            "specialEffect": null,
-            "soundEffectId": "",
-            "visualEffectId": ""
-        },
-        "attributeModifiers": [
+        "buffId": 35501021,
+        "buffType": 4,
+        "canRemove": true,
+        "conRound": 2,
+        "canStack": false,
+        "stackLimit": 0,
+        "effectList": [
             {
-                "attributeType": 1, // 例如：1代表生命值
-                "modifierType": 0, // 例如：0代表加法
-                "value": 0.0,
-                "isPercent": false
+                "effectType": 6,
+                "param": [
+                    1001,
+                    1000,
+                    -1,
+                    2,
+                    2,
+                    0,
+                    0,
+                    0
+                ]
+            }
+        ],
+        "endList": [
+            {
+            }
+        ]
+    },
+    {
+        "buffId": 35501022,
+        "buffType": 1,
+        "canRemove": true,
+        "conRound": 2,
+        "canStack": false,
+        "stackLimit": 0,
+        "effectList": [
+            {
+                "effectType": 6,
+                "param": [
+                    1003,
+                    500,
+                    1,
+                    1,
+                    6,
+                    0,
+                    0,
+                    0
+                ]
+            }
+        ],
+        "endList": [
+            {
+            }
+        ]
+    },
+    {
+        "buffId": 35501023,
+        "buffType": 5,
+        "canRemove": true,
+        "conRound": 2,
+        "canStack": false,
+        "stackLimit": 0,
+        "effectList": [
+            {
+                "effectType": 2,
+                "param": [
+                    1000,
+                    0,
+                    0,
+                    6,
+                    0
+                ]
+            }
+        ],
+        "endList": [
+            {
+            }
+        ]
+    },
+    {
+        "buffId": 35501031,
+        "buffType": 1,
+        "canRemove": true,
+        "conRound": -1,
+        "canStack": false,
+        "stackLimit": 0,
+        "effectList": [
+            {
+                "effectType": 5,
+                "param": [
+                    35501031
+                ]
+            }
+        ],
+        "endList": [
+            {
+                "effectType": 5,
+                "param": [
+                    35501033
+                ]
+            }
+        ]
+    },
+    {
+        "buffId": 35501032,
+        "buffType": 1,
+        "canRemove": true,
+        "conRound": -1,
+        "canStack": false,
+        "stackLimit": 0,
+        "effectList": [
+            {
+                "effectType": 5,
+                "param": [
+                    35501032
+                ]
+            }
+        ],
+        "endList": [
+            {
+                "effectType": 5,
+                "param": [
+                    35501034
+                ]
+            }
+        ]
+    },
+    {
+        "buffId": 34201051,
+        "buffType": 1,
+        "canRemove": false,
+        "conRound": -1,
+        "canStack": false,
+        "stackLimit": 0,
+        "effectList": [
+            {
+                "effectType": 5,
+                "param": [
+                    34201051
+                ]
+            }
+        ],
+        "endList": [
+            {
+            }
+        ]
+    },
+    {
+        "buffId": 34201031,
+        "buffType": 4,
+        "canRemove": true,
+        "conRound": 2,
+        "canStack": false,
+        "stackLimit": 5,
+        "effectList": [
+            {
+                "effectType": 5,
+                "param": [
+                    34201031
+                ]
+            }
+        ],
+        "endList": [
+            {
+            }
+        ]
+    },
+    {
+        "buffId": 34201032,
+        "buffType": 4,
+        "canRemove": true,
+        "conRound": 2,
+        "canStack": false,
+        "stackLimit": 5,
+        "effectList": [
+            {
+                "effectType": 5,
+                "param": [
+                    34201032
+                ]
+            }
+        ],
+        "endList": [
+            {
             }
         ]
     }

@@ -37,7 +37,8 @@ namespace Server.Battle.Config
 
         // 配置数据存储
         private Dictionary<int, SkillConfigData> _skillConfigs;
-        private Dictionary<string, BuffConfigData> _buffConfigs;
+        private Dictionary<int, BuffConfigData> _buffConfigs;
+        private Dictionary<int, TriggerConfigData> _triggerConfigs;
         
         // 配置文件监控
         private Dictionary<string, DateTime> _configFileTimestamps;
@@ -60,7 +61,8 @@ namespace Server.Battle.Config
             if (_isInitialized) return;
 
             _skillConfigs = new Dictionary<int, SkillConfigData>();
-            _buffConfigs = new Dictionary<string, BuffConfigData>();
+            _buffConfigs = new Dictionary<int, BuffConfigData>();
+            _triggerConfigs = new Dictionary<int, TriggerConfigData>();
             _configFileTimestamps = new Dictionary<string, DateTime>();
 
             LoadAllConfigs();
@@ -99,7 +101,8 @@ namespace Server.Battle.Config
             {
                 LoadSkillConfigs();
                 LoadBuffConfigs();
-                
+                LoadTriggerConfigs();
+
                 ValidateConfigs();
                 
                 Console.WriteLine($"[SkillConfigLoader] 配置加载完成: {_skillConfigs.Count}个技能");
@@ -188,11 +191,6 @@ namespace Server.Battle.Config
 
                     foreach (var buff in buffs)
                     {
-                        if (string.IsNullOrEmpty(buff.buffId))
-                        {
-                            Console.WriteLine($"[SkillConfigLoader] Buff配置缺少buffId: {buff.buffName}");
-                            continue;
-                        }
                         if (_buffConfigs.ContainsKey(buff.buffId))
                         {
                             Console.WriteLine($"[SkillConfigLoader] 重复的BuffID: {buff.buffId}");
@@ -209,6 +207,54 @@ namespace Server.Battle.Config
                 catch (Exception e)
                 {
                     Console.WriteLine($"[SkillConfigLoader] 加载Buff配置失败 {filePath}: {e.Message}");
+                }
+            }
+        }
+
+        /// <summary>
+        /// 加载Buff配置
+        /// </summary>
+        private void LoadTriggerConfigs()
+        {
+            _triggerConfigs.Clear();
+
+            // 获取当前程序目录下的Buff配置路径
+            string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+            string tiggerConfigPath = Path.Combine(baseDir, configRootPath, "Triggers");
+
+            if (!Directory.Exists(tiggerConfigPath))
+            {
+                Console.WriteLine($"[SkillConfigLoader] Trigger配置目录不存在: {tiggerConfigPath}");
+                return;
+            }
+
+            string[] jsonFiles = Directory.GetFiles(tiggerConfigPath, "*.json");
+
+            foreach (string filePath in jsonFiles)
+            {
+                try
+                {
+                    string jsonContent = File.ReadAllText(filePath);
+                    TriggerConfigData[] triggers = JsonConvert.DeserializeObject<TriggerConfigData[]>(jsonContent);
+
+                    foreach (var trigger in triggers)
+                    {
+                        if (_triggerConfigs.ContainsKey(trigger.triggerId))
+                        {
+                            Console.WriteLine($"[SkillConfigLoader] 重复的TriggerID: {trigger.triggerId}");
+                            continue;
+                        }
+                        _triggerConfigs[trigger.triggerId] = trigger;
+                    }
+
+                    // 记录文件时间戳
+                    _configFileTimestamps[filePath] = File.GetLastWriteTime(filePath);
+
+                    Console.WriteLine($"[SkillConfigLoader] 加载Trigger配置: {Path.GetFileName(filePath)} ({triggers.Length}个Buff)");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"[SkillConfigLoader] 加载Trigger配置失败 {filePath}: {e.Message}");
                 }
             }
         }
@@ -326,31 +372,6 @@ namespace Server.Battle.Config
     }
 
     /// <summary>
-    /// 卡牌配置数据
-    /// </summary>
-    [Serializable]
-    public class CardConfigData
-    {
-        public int cardId;
-        public string cardName;
-        public string description;
-        public string rarity;
-        public List<CardSkillRef> skills;
-        public AIPreferences aiPreferences;
-    }
-
-    /// <summary>
-    /// 卡牌技能引用
-    /// </summary>
-    [Serializable]
-    public class CardSkillRef
-    {
-        public int skillId;
-        public int unlockLevel;
-        public bool isDefault;
-    }
-
-    /// <summary>
     /// AI偏好设置
     /// </summary>
     [Serializable]
@@ -360,26 +381,5 @@ namespace Server.Battle.Config
         public float buffProbability;    // 使用增益技能概率
         public int aoeThreshold;         // AOE技能使用的敌人数量阈值
         public float aggressiveness;     // 攻击性 (0-1)
-    }
-
-    /// <summary>
-    /// Buff配置数据
-    /// </summary>
-    [Serializable]
-    public class BuffConfigData
-    {
-        public string buffId;
-        public string buffName;
-        public string description;
-        public EffectType buffType;
-        public bool isVisible;
-        public string icon;
-        public int maxStacks;
-        public int defaultDuration;
-        public StackType stackType;
-        public string dispelType;
-        public string[] immunityTags;
-        public SkillEffectData tickEffect;
-        public AttributeModifierData[] attributeModifiers;
     }
 }

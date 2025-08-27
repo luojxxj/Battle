@@ -71,16 +71,19 @@ namespace Battle.Enum
     public enum StackType
     {
         /// <summary>不叠加 - 新效果覆盖旧效果</summary>
-        None,
+        None = 0,
 
         /// <summary>叠加 - 层数和持续时间都叠加</summary>
         Stack,
+    }
 
-        /// <summary>刷新 - 刷新持续时间，但不叠加层数</summary>
-        Refresh,
-
-        /// <summary>独立存在 - 可以多个同时存在，互不影响</summary>
-        Independent
+    public enum BuffType
+    {
+        Buff = 1,    // 增益
+        Damage,      //伤害
+        Control,     //控制
+        Debuff,      //减益
+        Heal         //治疗
     }
 
     /// <summary>
@@ -218,5 +221,29 @@ namespace Battle.Enum
 
         /// <summary>友方随机</summary>
         AllyRandom = 25,
+    }
+
+    public enum Condition
+    {
+        Hp = 1001,         // 血量百分比
+        BuffId,            // Buff存在
+        UseSkill,          // 使用技能
+        FightCount,        // 攻击次数
+        Class,             // 职业
+        Camp,              // 阵营
+        Death,             // 是否死亡
+        Azimuth,           // 站位
+        Dodge,             // 是否闪避
+        Block,             // 是否格挡
+        HeroId,            // 场上是否存在某个英雄Id
+        Crit,              // 是否暴击
+        Round,             // 回合数间隔
+        SkillType,         // 技能类型
+        Action,            // 是否行动
+        Hit,               // 是否命中
+        Harm,              // 受到伤害
+        TriHeal,           // 触发治疗
+        InflictionHeal,    // 施加治疗
+        TriHarm,           // 触发伤害
     }
 }

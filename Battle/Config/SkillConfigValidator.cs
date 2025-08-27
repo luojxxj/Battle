@@ -61,7 +61,7 @@ namespace Server.Battle.Config
         /// <summary>
         /// 验证技能效果
         /// </summary>
-        private static void ValidateSkillEffects(List<SkillEffectData> effects, ValidationResult result)
+        private static void ValidateSkillEffects(List<EffectData> effects, ValidationResult result)
         {
             if (effects == null || effects.Count == 0)
             {

@@ -67,18 +67,18 @@ namespace Server.Battle
             request.TeamOne.Add(new Hero
             {
                 Uid = 1,
-                AttackId = 101, // 普通攻击ID
-                SkillId = 201, // 主动技能ID
-                PassiveSkillIds = new List<int> { 301, 302 }, // 被动技能ID列表
+                AttackId = 3550101, // 普通攻击ID
+                SkillId = 3550102, // 主动技能ID
+                PassiveSkillIds = new List<int> { 3550103, 3550104, 3550105 }, // 被动技能ID列表
                 AttrDic = new Dictionary<int, float> { { 1001, 100 }, { 1002, 10}, { 1003 , 20 }, { 1004 , 121 } }
             });
 
             request.TeamTwo.Add(new Hero
             {
                 Uid = 2,
-                AttackId = 102, // 普通攻击ID
-                SkillId = 202, // 主动技能ID
-                PassiveSkillIds = new List<int> { 303, 304 }, // 被动技能ID列表
+                AttackId = 3420101, // 普通攻击ID
+                SkillId = 3420102, // 主动技能ID
+                PassiveSkillIds = new List<int> { 3420103 }, // 被动技能ID列表
                 AttrDic = new Dictionary<int, float> { { 1001, 100 }, { 1002, 8 }, { 1003, 21 }, { 1004, 125 } }
             });
 

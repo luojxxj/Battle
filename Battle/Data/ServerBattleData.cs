@@ -83,6 +83,7 @@ namespace Server.Battle.Data
             public float pierceRate; // 穿透率
             public bool isAlive;           // 是否存活
             
+
             // 统计数据
             public int totalDamageDealt;   // 总造成伤害
             public int totalDamageReceived; // 总承受伤害
