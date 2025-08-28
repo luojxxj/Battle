@@ -1,3 +1,4 @@
+using Server.Battle.Config;
 using Server.Battle.Skill;
 
 namespace Server.Battle.Data
@@ -82,7 +83,7 @@ namespace Server.Battle.Data
             public float blockRate; // 格挡率
             public float pierceRate; // 穿透率
             public bool isAlive;           // 是否存活
-            
+            public List<BuffState> activeBuffs;  // 当前状态列表
 
             // 统计数据
             public int totalDamageDealt;   // 总造成伤害
@@ -137,22 +138,14 @@ namespace Server.Battle.Data
             public string battleId;                    // 战斗ID
             public BattleResult result;               // 战斗结果
             public List<BattleRound> rounds;          // 所有回合数据
-            public BattleStatistics statistics;       // 战斗统计
-            public DateTime battleStartTime;          // 战斗开始时间
-            public DateTime battleEndTime;            // 战斗结束时间
+            public List<UnitStatistics> unitStatistics; //单位统计数据
             public int totalRounds;                   // 总回合数
             
             public CompleteBattleData()
             {
                 rounds = new List<BattleRound>();
                 battleId = Guid.NewGuid().ToString();
-                battleStartTime = DateTime.Now;
             }
-            
-            /// <summary>
-            /// 战斗持续时间（秒）
-            /// </summary>
-            public double BattleDurationSeconds => (battleEndTime - battleStartTime).TotalSeconds;
         }
 
         /// <summary>
@@ -166,10 +159,6 @@ namespace Server.Battle.Data
             public int damageReceived;           // 承受伤害
             public int healingDone;              // 治疗量
             public int healingReceived;          // 承受治疗
-            public int cardsUsed;                // 使用卡牌数
-            public int criticalHits;             // 暴击次数
-            public int actionCount;              // 行动次数
-            public bool survived;                // 是否存活
         }
         
         /// <summary>
@@ -223,7 +212,6 @@ namespace Server.Battle.Data
             public long sourceUnitId;                      // 动作发起者
             public List<long> targetUnitIds;               // 目标单位列表
             public int skillId;                           // 使用的技能ID
-            public int roundNumber;                       // 发生的回合
             public bool isCritical;                       // 是否暴击
             public bool isMiss;                           // 是否miss
             public int value;                             // 数值（伤害、治疗等）
@@ -236,20 +224,6 @@ namespace Server.Battle.Data
                 targetUnitIds = new List<long>();
                 actionData = new Dictionary<string, object>();
             }
-        }
-
-        /// <summary>
-        /// 战斗统计信息
-        /// </summary>
-        [Serializable]
-        public class BattleStatistics
-        {
-            public int totalRounds;
-            public int totalActions;
-            public float battleDuration;
-            public int team1UnitsRemaining;
-            public int team2UnitsRemaining;
-            public int winner;
         }
 
         #endregion

@@ -92,10 +92,8 @@ namespace Server.Battle.Skill
     public class BuffState
     {
         public int buffId;                          // BuffID
-        public string buffName;                     // Buff名称
         public EffectType buffType;                 // Buff类型
         public long sourceUnitId;                    // 来源单位ID
-        public long targetUnitId;                    // 目标单位ID
         public int sourceSkillId;                   // 来源技能ID
         
         public int remainingDuration;               // 剩余持续时间
@@ -172,10 +170,8 @@ namespace Server.Battle.Skill
             var newBuff = new BuffState
             {
                 buffId = _nextBuffId++,
-                buffName = $"Skill_{sourceSkillId}_Effect_{effect.effectId}",
                 buffType = effect.effectType,
                 sourceUnitId = sourceUnitId,
-                targetUnitId = targetUnitId,
                 sourceSkillId = sourceSkillId,
                 remainingDuration = effect.duration,
                 currentStacks = 1,

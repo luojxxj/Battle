@@ -27,7 +27,7 @@ namespace Server.Battle.API
         #region PVE战斗接口
         
         /// <summary>
-        /// 开始战斗
+        /// 开始PVE战斗
         /// POST /api/battle/pve/start
         /// </summary>
         /// <param name="request">PVE战斗请求</param>
@@ -46,7 +46,7 @@ namespace Server.Battle.API
                     };
                 }
                 
-                Console.WriteLine($"[BattleController] 收到战斗请求 - 玩家: {request.playerId}");
+                Console.WriteLine($"[BattleController] 收到PVE战斗请求 - 玩家: {request.playerId}");
                 
                 // 调用战斗管理器处理
                 var response = await _battleManager.HandleBattleRequest(
@@ -59,6 +59,52 @@ namespace Server.Battle.API
             catch (Exception ex)
             {
                 Console.WriteLine($"[BattleController] PVE战斗接口异常: {ex.Message}");
+                
+                return new BattleLoadCompleteResponse
+                {
+                    success = false,
+                    message = "服务器内部错误"
+                };
+            }
+        }
+        
+        #endregion
+
+        #region PVP战斗接口
+        
+        /// <summary>
+        /// 开始PVP战斗
+        /// POST /api/battle/pvp/start
+        /// </summary>
+        /// <param name="request">PVP战斗请求</param>
+        /// <returns>战斗响应</returns>
+        public async Task<BattleLoadCompleteResponse> StartPvpBattle(StartBattleRequest request)
+        {
+            try
+            {
+                // 参数验证
+                if (request == null)
+                {
+                    return new BattleLoadCompleteResponse
+                    {
+                        success = false,
+                        message = "请求参数不能为空"
+                    };
+                }
+                
+                Console.WriteLine($"[BattleController] 收到PVP战斗请求 - 玩家: {request.playerId}");
+                
+                // 调用战斗管理器处理
+                var response = await _battleManager.HandleBattleRequest(
+                    request.playerId,
+                    request.TeamOne,
+                    request.TeamTwo);
+                
+                return response;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[BattleController] PVP战斗接口异常: {ex.Message}");
                 
                 return new BattleLoadCompleteResponse
                 {

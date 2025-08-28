@@ -48,7 +48,7 @@ namespace Server.Battle.Config
     public class BuffConfigData
     {
         public int buffId;
-        public BuffType buffType;
+        public EffectType buffType;
         public bool canRemove;
         public int conRound;
         public bool canStack;

@@ -90,7 +90,6 @@ namespace Server.Battle
                 Console.WriteLine($"战斗开始成功！战斗ID: {battleResponse.battleId}");
                 Console.WriteLine($"战斗结果: {battleResponse.battleData.result}");
                 Console.WriteLine($"总回合数: {battleResponse.battleData.totalRounds}");
-                Console.WriteLine($"战斗时长: {battleResponse.battleData.BattleDurationSeconds:F2}秒");
 
                 // 打印回合详情
                 PrintBattleDetails(battleResponse.battleData);

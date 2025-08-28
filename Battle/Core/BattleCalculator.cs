@@ -62,11 +62,8 @@ namespace Server.Battle.Core
             Console.WriteLine($"[BattleCalculator] 开始计算战斗");
 
             // 初始化战斗数据
-            _battleData = new CompleteBattleData
-            {
-                battleStartTime = DateTime.Now
-            };
-
+            _battleData = new CompleteBattleData();
+            
             // 初始化单位
             InitializePlayerUnits(teamOne);
             InitializeEnemyUnits(teamTwo);
@@ -78,9 +75,7 @@ namespace Server.Battle.Core
             ExecuteBattle();
 
             // 完成战斗统计
-            _battleData.battleEndTime = DateTime.Now;
             _battleData.totalRounds = _battleData.rounds.Count;
-            CalculateBattleStatistics();
 
             Console.WriteLine($"[BattleCalculator] 战斗计算完成，结果: {_battleData.result}, 回合数: {_battleData.totalRounds}");
 
@@ -879,14 +874,6 @@ namespace Server.Battle.Core
         /// </summary>
         private void UpdateActionStatistics(BattleAction action)
         {
-        }
-
-        /// <summary>
-        /// 计算战斗统计
-        /// </summary>
-        private void CalculateBattleStatistics()
-        {
-            _battleData.statistics = new BattleStatistics();
         }
 
         #endregion

@@ -77,15 +77,6 @@ namespace Battle.Enum
         Stack,
     }
 
-    public enum BuffType
-    {
-        Buff = 1,    // 增益
-        Damage,      //伤害
-        Control,     //控制
-        Debuff,      //减益
-        Heal         //治疗
-    }
-
     /// <summary>
     /// 条件类型枚举
     /// 定义技能释放条件的检查类型
