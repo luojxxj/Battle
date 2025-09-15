@@ -1,0 +1,192 @@
+syntax = "proto3";
+option csharp_namespace = "BattleReport";
+package BattleReport;
+
+// 战报结构
+message BattleReport {
+  // 战报的唯一ID
+  string BattleReportId = 1;
+  // 战斗开始时间
+  int64 BattleStartTime = 2;
+  // 战斗结果
+  BattleResult Result = 3;
+  // 所有单位的初始状态
+  InitialState InitialState = 4;
+  // 所有回合的记录列表
+  repeated RoundLog Rounds = 5;
+}
+
+// 初始状态与单位定义
+message InitialState {
+  repeated UnitInitialState Team1 = 1;
+  repeated UnitInitialState Team2 = 2;
+}
+
+message UnitInitialState {
+  // 战斗中唯一的实例ID
+  int32 UnitId = 1;
+  // 英雄的配置ID (例如英雄表里的ID)
+  int32 HeroId = 2;
+  // 名字
+  string Name = 3;
+  // 所属队伍 (1或2)
+  int32 TeamId = 4;
+  // 位置 (例如 1-6)
+  int32 Position = 5;
+  // 携带的技能ID列表
+  repeated int32 SkillIds = 10;
+}
+
+
+//回合与行动结构
+message RoundLog {
+  // 回合数
+  int32 RoundNumber = 1;
+  // 本回合所有单位的行动列表
+  repeated ActionLog Actions = 2;
+}
+
+message ActionLog {
+  // 发起行动的单位ID
+  int32 SourceUnitId = 1;
+  // 使用的技能ID
+  int32 SkillId = 2;
+  // 技能选择的主要目标单位ID列表
+  repeated int32 MainTargetIds = 3;
+  // 本次行动产生的所有原子化结果列表
+  repeated ActionResult Results = 4;
+}
+
+// 原子化结果 (核心设计)
+// 使用 oneof 来实现多态，一个ActionResult消息体在同一时刻只能是其中一种结果
+message ActionResult {
+  oneof ResultType {
+    DamageResult Damage = 1;
+    HealResult Heal = 2;
+    BuffApplyResult BuffApply = 3;
+    OddsResult Odds = 4;
+    TriggerResult Trigger = 5;
+    StateChangeResult StateChange = 6;
+    BuffRemoveResult BuffRemove = 7;
+    ReviveResult Revive = 8;
+    FlowControlResult FlowControl = 9;
+    DisControlResult DisControl = 10;
+    ControlResult Control = 11;
+    AddBuffsResult AddBuffs = 12;
+    ShieldResult Shield = 13;
+    TauntResult Taunt = 14;
+    MinHpHealResult MinHpHeal = 15;
+    RecordHarmResult RecordHarm = 16; 
+  }
+}
+
+// 具体的结果类型定义
+message DamageResult {
+  int32 TargetUnitId = 1;
+  int32 Amount = 2;         // 伤害数值 (通常为正数，表示损失)
+  bool IsCritical = 3;
+  bool IsLethal = 4;
+  int32 CurrentHp = 5;     // 造成伤害后目标的当前血量
+}
+
+message HealResult {
+  int32 TargetUnitId = 1;
+  int32 Amount = 2;         // 治疗数值
+  int32 CurrentHp = 3;     // 治疗后目标的当前血量
+}
+
+message BuffApplyResult {
+  int32 TargetUnitId = 1;
+  int32 BuffId = 2;       // 施加的Buff的配置ID
+  int32 Duration = 3;      // 持续回合数
+  int32 StackCount = 4;   // 施加后的总层数
+}
+
+message OddsResult{
+    int32 EffectId = 1;    //效果Id
+    int32 Odds = 2;         //触发概率
+}
+
+message TriggerResult{
+    int32 TriggerId = 1;    //触发器Id
+}
+
+message StateChangeResult {
+  int32 AttrId = 1;        //属性Id
+  int32 ChangeType = 2;    //变更类型加算或者乘算
+  int32 ChangeAmount = 3;  //改变数值
+  int32 Type = 4;          //变更类型，增加或者减少
+  int32 TargetType = 5;    //目标类型
+  int32 TargetNum = 6;     //目标数量
+  int32 IsSteal = 7;       //是否是窃取属性
+  int32 GetTargetType = 8; //获取属性目标类型(0:自己，1：友方，2：敌方)
+  int32 StealRate = 9;     //窃取属性比例
+}
+
+message BuffRemoveResult {
+  int32 BuffType = 1;       //移除的Buff类型
+  int32 TargetType = 2;     //对象(0:自己，1：友方，2敌方)
+  int32 TargetNum = 3;      //目标数量（-1为全部）
+}
+
+message ReviveResult{
+    int32 TargetNum = 1;    //目标数量
+    int32 ReviveHp = 2;     //复活后的生命值
+    int32 ReviveMp = 3;     //复活后的怒气
+}
+
+message FlowControlResult {
+  FlowControlType Type = 1; //流程类型:0:重置技能冷却 1:获得额外回合 2:立即释放技能
+  int32 Odds = 2;           //概率
+}
+
+message DisControlResult {
+    int32 TargetType = 1;   //对象(0:自己，1：友方，2敌方)
+    int32 TargetNum = 2;    //目标数量
+}
+
+message ControlResult {
+    int32 TargetType = 1;   //对象(0:自己，1：友方，2敌方)
+    int32 TargetNum = 2;    //目标数量
+}
+
+message AddBuffsResult{
+    int32 BuffType = 1;     //Buff类型
+    int32 TargetType = 2;   //对象(0:自己，1：友方，2敌方)
+    int32 TargetNum = 3;    //目标数量
+}
+
+message ShieldResult {
+  int32 MaxHpRate = 1;      //护盾值占最大生命值的比例（百分比）
+  int32 CurrentHp = 2;      //当前生命值系数 
+  int32 CurrentDefence = 3; //当前防御力系数
+  int32 TargetType = 4;   //对象(0:自己，1：友方，2敌方)
+  int32 TargetNum = 5;    //目标数量
+}
+
+message TauntResult{
+  int32 TargetType = 1;   //对象(0:自己，1：友方，2敌方)
+  int32 TargetNum = 2;    //目标数量
+}
+
+message MinHpHealResult{
+  int32 TargetType = 1;   //对象(0:自己，1：友方，2敌方)
+  int32 TargetNum = 2;    //目标数量
+  int32 HealRate = 3;     //治疗比例
+}
+
+message RecordHarmResult{
+  int32 DamageRate = 1;     //造成伤害比例
+}
+
+// 枚举定义
+enum BattleResult {
+  Victory = 0;
+  Defeat = 1;
+}
+
+enum FlowControlType {
+  ResetSkillCooldown = 0; // 重置技能冷却
+  GrantExtraTurn = 1; // 获得额外回合
+  ImmediateSkillCast = 2; // 立即释放技能
+}

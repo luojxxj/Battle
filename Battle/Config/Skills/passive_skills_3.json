@@ -1,0 +1,426 @@
+[
+    {
+        "skillId": 3001,
+        "skillType": 3,
+        "revolutionType": 0,
+        "revolutionCost": 0,
+        "targetType": 15,
+        "targetCount": 3,
+        "effects": [
+            {
+                "effectType": 6,
+                "param": [3017, 3000, 0, 0, 999, 0, 0, 0]
+            }
+        ],
+        "priority": 1,
+        "critical": false,
+        "hit": true
+    },
+    {
+        "skillId": 3002,
+        "skillType": 3,
+        "revolutionType": 0,
+        "revolutionCost": 0,
+        "targetType": 14,
+        "targetCount": 1,
+        "effects": [
+            {
+                "effectType": 6,
+                "param": [3007, 3000, 0, 0, 999, 0, 0, 0]
+            }
+        ],
+        "priority": 1,
+        "critical": false,
+        "hit": true
+    },
+    {
+        "skillId": 3003,
+        "skillType": 3,
+        "revolutionType": 0,
+        "revolutionCost": 0,
+        "targetType": 22,
+        "targetCount": 3,
+        "effects": [
+            {
+                "effectType": 3,
+                "param": [30030001]
+            }
+        ],
+        "priority": 1,
+        "critical": false,
+        "hit": true
+    },
+    {
+        "skillId": 3004,
+        "skillType": 3,
+        "revolutionType": 0,
+        "revolutionCost": 0,
+        "targetType": 9,
+        "targetCount": 6,
+        "effects": [
+            {
+                "effectType": 6,
+                "param": [3007, 10000, 0, 0, 999, 0, 0, 0]
+            }
+        ],
+        "priority": 1,
+        "critical": false,
+        "hit": true
+    },
+    {
+        "skillId": 3005,
+        "skillType": 3,
+        "revolutionType": 0,
+        "revolutionCost": 0,
+        "targetType": 14,
+        "targetCount": 1,
+        "effects": [
+            {
+                "effectType": 10,
+                "param": [0, 0, 0, 0, 1]
+            }
+        ],
+        "priority": 1,
+        "critical": false,
+        "hit": true
+    },
+    {
+        "skillId": 3006,
+        "skillType": 3,
+        "revolutionType": 0,
+        "revolutionCost": 0,
+        "targetType": 24,
+        "targetCount": 6,
+        "effects": [
+            {
+                "effectType": 6,
+                "param": [2005, 10000, 0, 0, 999, 0, 0, 0]
+            }
+        ],
+        "priority": 1,
+        "critical": false,
+        "hit": true
+    },
+    {
+        "skillId": 3007,
+        "skillType": 3,
+        "revolutionType": 0,
+        "revolutionCost": 0,
+        "targetType": 14,
+        "targetCount": 1,
+        "effects": [
+            {
+                "effectType": 6,
+                "param": [1002, 10000, 0, 0, 999, 0, 0, 0]
+            }
+        ],
+        "priority": 1,
+        "critical": false,
+        "hit": true
+    },
+    {
+        "skillId": 3008,
+        "skillType": 3,
+        "revolutionType": 0,
+        "revolutionCost": 0,
+        "targetType": 21,
+        "targetCount": 6,
+        "effects": [
+            {
+                "effectType": 6,
+                "param": [3012, -5000, 0, 0, 999, 3014, -10000, 0]
+            }
+        ],
+        "priority": 1,
+        "critical": false,
+        "hit": true
+    },
+    {
+        "skillId": 3009,
+        "skillType": 3,
+        "revolutionType": 0,
+        "revolutionCost": 0,
+        "targetType": 21,
+        "targetCount": 6,
+        "effects": [
+            {
+                "effectType": 6,
+                "param": [3007, 5000, 0, 0, 999, 0, 0, 0]
+            }
+        ],
+        "priority": 1,
+        "critical": false,
+        "hit": true
+    },
+    {
+        "skillId": 3010,
+        "skillType": 3,
+        "revolutionType": 0,
+        "revolutionCost": 0,
+        "targetType": 21,
+        "targetCount": 6,
+        "effects": [
+            {
+                "effectType": 6,
+                "param": [1003, -1000, 0, 0, 3, 0, 0, 0]
+            }
+        ],
+        "priority": 1,
+        "critical": false,
+        "hit": true
+    },
+    {
+        "skillId": 3011,
+        "skillType": 3,
+        "revolutionType": 0,
+        "revolutionCost": 0,
+        "targetType": 22,
+        "targetCount": 2,
+        "effects": [
+            {
+                "effectType": 9,
+                "param": [50000, 5000, 1, 1002, 1]
+            }
+        ],
+        "priority": 1,
+        "critical": false,
+        "hit": true
+    },
+    {
+        "skillId": 3012,
+        "skillType": 3,
+        "revolutionType": 0,
+        "revolutionCost": 0,
+        "targetType": 14,
+        "targetCount": 1,
+        "effects": [
+            {
+                "effectType": 13,
+                "param": [20000, 0, 1, 1001, 1]
+            }
+        ],
+        "priority": 1,
+        "critical": false,
+        "hit": true
+    },
+    {
+        "skillId": 3013,
+        "skillType": 3,
+        "revolutionType": 0,
+        "revolutionCost": 0,
+        "targetType": 24,
+        "targetCount": 6,
+        "effects": [
+            {
+                "effectType": 6,
+                "param": [3008, 2000, 0, 0, 2, 0, 0, 0]
+            }
+        ],
+        "priority": 1,
+        "critical": false,
+        "hit": true
+    },
+    {
+        "skillId": 3014,
+        "skillType": 3,
+        "revolutionType": 0,
+        "revolutionCost": 0,
+        "targetType": 14,
+        "targetCount": 1,
+        "effects": [
+            {
+                "effectType": 13,
+                "param": [20000, 30000, 1, 1003, 1]
+            }
+        ],
+        "priority": 1,
+        "critical": false,
+        "hit": true
+    },
+    {
+        "skillId": 3015,
+        "skillType": 3,
+        "revolutionType": 0,
+        "revolutionCost": 0,
+        "targetType": 21,
+        "targetCount": 6,
+        "effects": [
+            {
+                "effectType": 6,
+                "param": [3009, 5000, 0, 0, 999, 0, 0, 0]
+            }
+        ],
+        "priority": 1,
+        "critical": false,
+        "hit": true
+    },
+    {
+        "skillId": 3016,
+        "skillType": 3,
+        "revolutionType": 0,
+        "revolutionCost": 0,
+        "targetType": 11,
+        "targetCount": 6,
+        "effects": [
+            {
+                "effectType": 6,
+                "param": [3018, -5000, 0, 0, 2, 0, 0, 0]
+            }
+        ],
+        "priority": 1,
+        "critical": false,
+        "hit": true
+    },
+    {
+        "skillId": 3017,
+        "skillType": 3,
+        "revolutionType": 0,
+        "revolutionCost": 0,
+        "targetType": 24,
+        "targetCount": 6,
+        "effects": [
+            {
+                "effectType": 11,
+                "param": [4000, 0, 0, 0, 1]
+            }
+        ],
+        "priority": 1,
+        "critical": false,
+        "hit": true
+    },
+    {
+        "skillId": 3018,
+        "skillType": 3,
+        "revolutionType": 0,
+        "revolutionCost": 0,
+        "targetType": 15,
+        "targetCount": 3,
+        "effects": [
+            {
+                "effectType": 2,
+                "param": [10000, 0, 1, 1002, 1]
+            }
+        ],
+        "priority": 1,
+        "critical": false,
+        "hit": true
+    },
+    {
+        "skillId": 3019,
+        "skillType": 3,
+        "revolutionType": 0,
+        "revolutionCost": 0,
+        "targetType": 21,
+        "targetCount": 6,
+        "effects": [
+            {
+                "effectType": 3,
+                "param": [30190001]
+            }
+        ],
+        "priority": 1,
+        "critical": false,
+        "hit": true
+    },
+    {
+        "skillId": 3020,
+        "skillType": 3,
+        "revolutionType": 0,
+        "revolutionCost": 0,
+        "targetType": 25,
+        "targetCount": 1,
+        "effects": [
+            {
+                "effectType": 2,
+                "param": [10000, 0, 1, 1002, 1]
+            },
+            {
+                "effectType": 17,
+                "param": [3, 0, 0, 0, 1]
+            }
+        ],
+        "priority": 1,
+        "critical": false,
+        "hit": true
+    },
+    {
+        "skillId": 3021,
+        "skillType": 3,
+        "revolutionType": 0,
+        "revolutionCost": 0,
+        "targetType": 14,
+        "targetCount": 1,
+        "effects": [
+            {
+                "effectType": 6,
+                "param": [1001, 1000, 0, 0, 999, 1002, 1000, 1003]
+            },
+            {
+                "effectType": 6,
+                "param": [3018, 5000, 0, 0, 999, 0, 0, 0]
+            }
+        ],
+        "priority": 1,
+        "critical": false,
+        "hit": true
+    },
+    {
+        "skillId": 3022,
+        "skillType": 3,
+        "revolutionType": 0,
+        "revolutionCost": 0,
+        "targetType": 14,
+        "targetCount": 1,
+        "effects": [
+            {
+                "effectType": 6,
+                "param": [2004, 2000, 0, 0, 999, 1002, 2000, 0]
+            }
+        ],
+        "priority": 1,
+        "critical": false,
+        "hit": true
+    },
+    {
+        "skillId": 3023,
+        "skillType": 3,
+        "revolutionType": 0,
+        "revolutionCost": 0,
+        "targetType": 14,
+        "targetCount": 1,
+        "effects": [
+            {
+                "effectType": 6,
+                "param": [1001, 1000, 0, 0, 999, 1002, 1000, 1003]
+            },
+            {
+                "effectType": 6,
+                "param": [2004, 2000, 0, 0, 999, 0, 0, 0]
+            }
+        ],
+        "priority": 1,
+        "critical": false,
+        "hit": true
+    },
+    {
+        "skillId": 3024,
+        "skillType": 3,
+        "revolutionType": 0,
+        "revolutionCost": 0,
+        "targetType": 14,
+        "targetCount": 1,
+        "effects": [
+            {
+                "effectType": 6,
+                "param": [1001, 2000, 0, 0, 999, 1002, 1000, 1003]
+            },
+            {
+                "effectType": 6,
+                "param": [3002, 2000, 0, 0, 999, 0, 0, 0]
+            }
+        ],
+        "priority": 1,
+        "critical": false,
+        "hit": true
+    }
+]

@@ -1,6 +1,8 @@
 using Server.Battle.Core;
 using static Server.Battle.Data.ServerBattleData;
 using Server.Battle.API;
+using BattleReport;
+using Google.Protobuf.WellKnownTypes;
 
 namespace Server.Battle.Logic
 {
